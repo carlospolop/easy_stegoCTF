@@ -7,7 +7,7 @@ from modules import Exif_module, Strings_module, Stego_module, LSB_module, Binwa
 def main(argv):
     hlp = "-f <inputfile> -o <outputdirectory> [-s <String_to_search> [-g/--stego] [-m/--metadata] [-b/--binwalk] [-l/--lsb] [-t/--strings] [-x/--hexdump] [-n/--noprint] [-r/--min-len <min_len_of_strings>]]"
     try:
-        opts, args = getopt.getopt(argv,"hf:o:s:gmbltxnr:",["help","ifile=","odir=","search=","stego","metadata","binwalk","lsb","strings","hexdump","noprint","min-len="])
+        opts, args = getopt.getopt(argv,"hf:o:s:gmbltxnr:z",["help","ifile=","odir=","search=","stego","metadata","binwalk","lsb","strings","hexdump","noprint","min-len=","sanitize"])
     except getopt.GetoptError:
         print hlp
         sys.exit(2)
@@ -15,7 +15,7 @@ def main(argv):
     general_urls = ["HexEditor: https://www.onlinehexeditor.com/","Steganographic Decoder: https://futureboy.us/stegano/decinput.html", "Find hidden images inside images: http://magiceye.ecksdee.co.uk/", "Fourier Transform: http://www.ejectamenta.com/Imaging-Experiments/fourierimagefiltering.html","PDF extractor: http://www.extractpdf.com/", "Gif frame extractor: https://ezgif.com/split", "Lector QR: http://qrlogo.kaarposoft.dk/qrdecode.html", "DTMF Tones: http://dialabc.com/sound/detect/index.html"]
     stego_tools = ["StegSecret(GUI): http://stegsecret.sourceforge.net/","StegSolve(GUI): www.caesum.com/handbook/Stegsolve.jar","Steganabara(GUI): https://github.com/zardus/ctf-tools","Zsteg: https://github.com/zed-0xff/zsteg.git","StegDetect: https://github.com/abeluck/stegdetect","Binwalk: https://github.com/ReFirmLabs/binwalk", "Exif-py: https://github.com/ianare/exif-py"]
     search, out_dir, min_len = "", "", 5
-    try_all, print_each, try_stego, try_exif, try_binwalk, try_lsb, try_strings, try_hexdump = True, True, False, False, False, False, False, False
+    try_all, print_each, try_stego, try_exif, try_binwalk, try_lsb, try_strings, try_hexdump, sanitize = True, True, False, False, False, False, False, False, False
 
     for opt, arg in opts:
         if opt == '-h':
@@ -30,11 +30,13 @@ def main(argv):
                 sys.exit(-1)
 
         elif opt in ("-o","--odir"):
-            if(os.path.isdir(arg)):
-                out_dir = arg
-            else:
-                print "Not a directory: "+out_dir
-                sys.exit(-1)
+            out_dir = arg
+            if not os.path.exists(out_dir):
+                try: 
+                    os.makedirs(out_dir)
+                except:
+                    "Not a directory: "+out_dir
+                    sys.exit(-1)
 
         elif opt in ("-g","--stego"):
             try_all = False
@@ -66,7 +68,11 @@ def main(argv):
             print_each = False
 
         elif opt in ("-r","--min-len"):
-            min_len = int(arg)
+            if arg.isdigit():
+                min_len = int(arg)
+
+        elif opt in ("-z", "--sanitize"):
+            sanitize = True
 
     if not out_dir or not inputfile:
         print "No out directory"
@@ -78,7 +84,7 @@ def main(argv):
 
 
     # Binwalk MODULE
-    bwlk = Binwalk_module(inputfile, out_dir, try_hexdump, search)
+    bwlk = Binwalk_module(inputfile, out_dir, try_hexdump, search, sanitize)
     if (try_all or try_binwalk):
         bwlk.execute()
 

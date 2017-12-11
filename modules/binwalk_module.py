@@ -1,11 +1,12 @@
 import binwalk
 
 class Binwalk_module:
-    def __init__(self, file_path, save_directory, hexdump, search=None):
+    def __init__(self, file_path, save_directory, hexdump, search=None, sanitize=False):
         self.file_path = file_path
         self.save_directory = save_directory
         self.hexdump = hexdump
         self.search = search
+        self.sanitize = sanitize
         self.current_entropy = -1
         self.found = False
         self.found_array = []
@@ -82,5 +83,4 @@ class Binwalk_module:
 
 
     def _sanitize_path(self,path):
-        s_path = path.split("public/")
-        return "/public/"+s_path[-1]
+        return "/public/"+path.split("public/")[-1] if self.sanitize else path
