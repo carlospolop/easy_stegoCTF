@@ -36,10 +36,10 @@ def main(argv):
                 try: 
                     os.makedirs(out_dir)
                 except:
-                    "Not a directory or not enough permissions: "+out_dir
+                    print "Not a directory or not enough permissions: "+out_dir
                     sys.exit(-2)
             if not os.path.isdir(out_dir) or not os.access(out_dir, os.W_OK):
-                "Not a directory or not enough permissions: "+out_dir
+                print "Not a directory or not enough permissions: "+out_dir
                 sys.exit(-2)
 
         elif opt in ("-g","--stego"):
@@ -120,7 +120,7 @@ def main(argv):
         print url
     for tool in stego_tools:
         print tool
-    print "###### End URLs ######"
+    print "###### End URLs ######\n"
 
     #Search MODULE
     if search != "":

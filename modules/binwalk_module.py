@@ -37,7 +37,7 @@ class Binwalk_module:
     
     def execute(self):
         try:
-            for module in binwalk.scan(self.file_path, signature=True, opcodes=True, extract=True, matryoshka=True, depth=100, entropy=True, save=True, directory=self.save_directory, hexdump=self.hexdump, quiet=True):
+            for module in binwalk.scan(self.file_path, signature=True, opcodes=True, extract=True, matryoshka=True, depth=100, entropy=True, nplot=True, directory=self.save_directory, hexdump=self.hexdump, quiet=True):
                 for result in module.results:
                     if result.module == "Entropy":
                         if self._check_entropy(result.description):
