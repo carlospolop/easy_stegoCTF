@@ -57,21 +57,25 @@ class Stego_module:
         #sudo ln -s /usr/bin/aclocal /usr/bin/aclocal-1.14
         #Change Makefile.in and add "--add-missing" in AUTOMAKE_OPTIONS
         try:
+            line = "stegdetect "+self.file_path
             self.output.append("#### Stegdetect ####")
-            self._execute_line("stegdetect "+self.file_path)
+            self._execute_line(line)
             self.output.append("#### Stegdetect End ####")
-        except:
-            self.output.append("Error: Do you have installed Stegdetect and in PATH? (https://github.com/abeluck/stegdetect)")
-        
+        except Exception as e:
+            self.output.append("Error: Do you have installed Stegdetect and in PATH? (https://github.com/abeluck/stegdetect) --> "+ line)
+            self.output.append(e)
+
 
     def _zsteg_tool(self):
         try:
+            line = "zsteg -a --min-str-len "+str(self.min_len)+" "+self.file_path
             self.output.append("#### Zsteg ####")
-            self._execute_line("zsteg -a --min-str-len "+str(self.min_len)+" "+self.file_path)
+            self._execute_line(line)
             self.output.append("#### Zsteg End ####")
         except:
-            self.output.append("Error: Do you have installed Zsteg and in PATH? (https://github.com/zed-0xff/zsteg.git)")
-        
+            self.output.append("Error: Do you have installed Zsteg and in PATH? (https://github.com/zed-0xff/zsteg.git) --> "+ line)
+            self.output.append(e)
+
 
     def _execute_line(self, cmd):
         pw = Popen(cmd.split(), stdout=PIPE, stderr=PIPE)

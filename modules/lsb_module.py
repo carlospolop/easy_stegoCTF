@@ -94,7 +94,7 @@ class LSB_module:
             rgbf_text = self._get_text(rgb_text)
             #rgbfi_text = self._get_text(rgb_text[::-1])
         except Exception as e:
-            print "Error extractin text from images: "+e
+            print "Error extracting text from images: "+e
 
         strs = []
         strs += find_strings(rf_text, self.min_len)
@@ -137,7 +137,7 @@ class LSB_module:
     
     def _au_contraire(self,px):
         return 0 if px==255 else 255
-        
+
 
     def _get_text(self, bin_data):
         return ''.join(chr(int(bin_data[i:i+8], 2)) for i in xrange(0, len(bin_data), 8))
