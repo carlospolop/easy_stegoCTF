@@ -103,7 +103,7 @@ def main(argv):
         strings.execute()
 
     # Stego MODULE
-    stego = Stego_module(inputfile, search)
+    stego = Stego_module(inputfile, search, min_len)
     if (try_all or try_stego):
         stego.execute()
 

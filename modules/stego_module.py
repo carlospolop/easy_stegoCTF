@@ -2,9 +2,10 @@ from subprocess import Popen, PIPE
 
 
 class Stego_module:
-    def __init__(self, file_path, search=None):
+    def __init__(self, file_path, search=None, min_len=5):
         self.file_path = file_path
         self.search = search
+        self.min_len = min_len
         self.found = False
         self.found_array = []
         self.usefull_urls = ["Stegdetect have more tools for stego(https://github.com/abeluck/stegdetect):\n\t./stegcompare orig.jpg modified.jpg\n\t./stegdeimage orig.jpg deimages.jpg\n\t./stegbreak [-V] [-r <rules>] [-f <wordlist>] [-t <schemes>] file.jpg ..."]
@@ -66,7 +67,7 @@ class Stego_module:
     def _zsteg_tool(self):
         try:
             self.output.append("#### Zsteg ####")
-            self._execute_line("zsteg -a "+self.file_path)
+            self._execute_line("zsteg -a --no-color --min-str-len "+self.min_len+" "+self.file_path)
             self.output.append("#### Zsteg End ####")
         except:
             self.output.append("Error: Do you have installed Zsteg and in PATH? (https://github.com/zed-0xff/zsteg.git)")
