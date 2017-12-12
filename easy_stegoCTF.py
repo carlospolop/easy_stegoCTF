@@ -8,7 +8,8 @@ def main(argv):
     hlp = "-f <inputfile> -o <outputdirectory> [-s <String_to_search> [-g/--stego] [-m/--metadata] [-b/--binwalk] [-l/--lsb] [-t/--strings] [-x/--hexdump] [-n/--noprint] [-r/--min-len <min_len_of_strings>]]"
     try:
         opts, args = getopt.getopt(argv,"hf:o:s:gmbltxnr:z",["help","ifile=","odir=","search=","stego","metadata","binwalk","lsb","strings","hexdump","noprint","min-len=","sanitize"])
-    except getopt.GetoptError:
+    except getopt.GetoptError, err:
+        print "~ %s" % str(err)
         print hlp
         sys.exit(2)
 
@@ -20,7 +21,7 @@ def main(argv):
     for opt, arg in opts:
         if opt == '-h':
             print hlp
-            sys.exit()
+            sys.exit(3)
 
         elif opt in ("-f", "--ifile"):
             inputfile = arg
@@ -36,7 +37,7 @@ def main(argv):
                     os.makedirs(out_dir)
                 except:
                     "Not a directory: "+out_dir
-                    sys.exit(-1)
+                    sys.exit(-2)
 
         elif opt in ("-g","--stego"):
             try_all = False
