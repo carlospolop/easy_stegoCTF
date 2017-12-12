@@ -67,7 +67,7 @@ class Stego_module:
     def _zsteg_tool(self):
         try:
             self.output.append("#### Zsteg ####")
-            self._execute_line("zsteg -a --no-color --min-str-len "+self.min_len+" "+self.file_path)
+            self._execute_line("zsteg -a --min-str-len "+str(self.min_len)+" "+self.file_path)
             self.output.append("#### Zsteg End ####")
         except:
             self.output.append("Error: Do you have installed Zsteg and in PATH? (https://github.com/zed-0xff/zsteg.git)")
@@ -76,6 +76,10 @@ class Stego_module:
     def _execute_line(self, cmd):
         pw = Popen(cmd.split(), stdout=PIPE, stderr=PIPE)
         stdout,stderr = pw.communicate()
+        if ("zsteg" in cmd and "nothing" in stdout):
+            self.output.append("[=] nothing :(")
+            return
+
         for l in stdout.split("\n"):
             self._save_in_output(l)
 
