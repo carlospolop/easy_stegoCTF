@@ -42,18 +42,18 @@ class Binwalk_module:
                     if self._check_entropy(result.description):
                         self._save_in_output("\t%s    %s    0x%.8X    %s" % (result.module, self._sanitize_path(result.file.path), result.offset, result.description))
                 else:
-                    if result.file.path and result.module and result.offset and result.description:
+                    if result.file:
                         self._save_in_output("\t%s    %s    0x%.8X    %s" % (result.module, self._sanitize_path(result.file.path), result.offset, result.description))
-                    if module.extractor.output.has_key(result.file.path):
-                    # These are files that binwalk carved out of the original firmware image, a la dd
-                        if module.extractor.output[result.file.path].carved.has_key(result.offset):
-                            self._save_in_output("Carved data from offset 0x%X to %s" % (result.offset, self._sanitize_path(module.extractor.output[result.file.path].carved[result.offset])) )
-                            # These are files/directories created by extraction utilities (gunzip, tar, unsquashfs, etc)
-                        if module.extractor.output[result.file.path].extracted.has_key(result.offset):
-                            self._save_in_output("Extracted %d files from offset 0x%X to '%s' using '%s'" % (len(module.extractor.output[result.file.path].extracted[result.offset].files),
-                                                                                                    result.offset,
-                                                                                                    self._sanitize_path(module.extractor.output[result.file.path].extracted[result.offset].files[0]),
-                                                                                                    module.extractor.output[result.file.path].extracted[result.offset].command) )
+                        if module.extractor.output.has_key(result.file.path):
+                        # These are files that binwalk carved out of the original firmware image, a la dd
+                            if module.extractor.output[result.file.path].carved.has_key(result.offset):
+                                self._save_in_output("Carved data from offset 0x%X to %s" % (result.offset, self._sanitize_path(module.extractor.output[result.file.path].carved[result.offset])) )
+                                # These are files/directories created by extraction utilities (gunzip, tar, unsquashfs, etc)
+                            if module.extractor.output[result.file.path].extracted.has_key(result.offset):
+                                self._save_in_output("Extracted %d files from offset 0x%X to '%s' using '%s'" % (len(module.extractor.output[result.file.path].extracted[result.offset].files),
+                                                                                                        result.offset,
+                                                                                                        self._sanitize_path(module.extractor.output[result.file.path].extracted[result.offset].files[0]),
+                                                                                                        module.extractor.output[result.file.path].extracted[result.offset].command) )
 
 
     def mprint(self):
