@@ -60,7 +60,7 @@ class Stego_module:
             line = ["stegdetect", self.file_path]
             self.output.append("#### Stegdetect ####")
             self._execute_line(line)
-            self.output.append("#### Stegdetect End ####")
+            self.output.append("#### Stegdetect End ####\n")
         except Exception as e:
             self.output.append("Error: Do you have installed Stegdetect and in PATH? (https://github.com/abeluck/stegdetect) --> "+ " ".join(line))
             self.output.append(e)

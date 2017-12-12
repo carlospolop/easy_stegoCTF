@@ -74,7 +74,7 @@ class Binwalk_module:
 
 
     def _check_entropy(self, entropy):
-        if (float(entropy) > self.current_entropy+0.5) or (float(entropy) < self.current_entropy-0.5):
+        if (float(entropy) > self.current_entropy+0.05) or (float(entropy) < self.current_entropy-0.05):
             self.current_entropy = float(entropy)
             return True
         return False
