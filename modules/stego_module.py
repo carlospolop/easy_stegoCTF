@@ -57,12 +57,12 @@ class Stego_module:
         #sudo ln -s /usr/bin/aclocal /usr/bin/aclocal-1.14
         #Change Makefile.in and add "--add-missing" in AUTOMAKE_OPTIONS
         try:
-            line = ["stegdetect",self.file_path]
+            line = ["stegdetect", self.file_path]
             self.output.append("#### Stegdetect ####")
             self._execute_line(line)
             self.output.append("#### Stegdetect End ####")
         except Exception as e:
-            self.output.append("Error: Do you have installed Stegdetect and in PATH? (https://github.com/abeluck/stegdetect) --> "+ line)
+            self.output.append("Error: Do you have installed Stegdetect and in PATH? (https://github.com/abeluck/stegdetect) --> "+ " ".join(line))
             self.output.append(e)
 
 
@@ -73,7 +73,7 @@ class Stego_module:
             self._execute_line(line)
             self.output.append("#### Zsteg End ####")
         except Exception as e:
-            self.output.append("Error: Do you have installed Zsteg and in PATH? (https://github.com/zed-0xff/zsteg.git) --> "+ line)
+            self.output.append("Error: Do you have installed Zsteg and in PATH? (https://github.com/zed-0xff/zsteg.git) --> "+ " ".join(line))
             self.output.append(e)
 
 
