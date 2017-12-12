@@ -76,12 +76,17 @@ class Stego_module:
     def _execute_line(self, cmd):
         pw = Popen(cmd.split(), stdout=PIPE, stderr=PIPE)
         stdout,stderr = pw.communicate()
-        if ("zsteg" in cmd and "nothing" in stdout):
-            self.output.append("[=] nothing :(")
-            return
+        if "zsteg" in cmd: 
+            if "nothing" in stdout:
+                self.output.append("[=] nothing :(")
+                return
+            for l in stdout.split("\n"):
+                ls = l.split()
+                self._save_in_output(ls[-4]+" "+ls[-2]+" "+ls[-1])
 
-        for l in stdout.split("\n"):
-            self._save_in_output(l)
+        else:
+            for l in stdout.split("\n"):
+                self._save_in_output(l)
 
 
     def _save_in_output(self, out):
