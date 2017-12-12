@@ -57,7 +57,7 @@ class Stego_module:
         #sudo ln -s /usr/bin/aclocal /usr/bin/aclocal-1.14
         #Change Makefile.in and add "--add-missing" in AUTOMAKE_OPTIONS
         try:
-            line = "stegdetect "+self.file_path
+            line = "stegdetect '"+self.file_path+"'"
             self.output.append("#### Stegdetect ####")
             self._execute_line(line)
             self.output.append("#### Stegdetect End ####")
@@ -68,7 +68,7 @@ class Stego_module:
 
     def _zsteg_tool(self):
         try:
-            line = "zsteg -a --min-str-len "+str(self.min_len)+" "+self.file_path
+            line = "zsteg -a --min-str-len "+str(self.min_len)+" '"+self.file_path+"'"
             self.output.append("#### Zsteg ####")
             self._execute_line(line)
             self.output.append("#### Zsteg End ####")
