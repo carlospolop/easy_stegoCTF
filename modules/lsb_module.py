@@ -1,5 +1,4 @@
 from PIL import Image
-import binascii
 
 from strings_module import find_strings
 
@@ -85,15 +84,17 @@ class LSB_module:
                 #pximg_rgbi[j,i]=(self._au_contraire(is_r), self._au_contraire(is_g), self._au_contraire(is_b))
             
         #Hidden Text
-        rf_text = binascii.unhexlify('%x' % int(r_text[:(len(r_text)/8)*8],2))
-        #rfi_text = binascii.unhexlify('%x' % int(r_text[::-1][:(len(r_text)/8)*8],2)) # Reverse binary
-        gf_text = binascii.unhexlify('%x' % int(g_text[:(len(g_text)/8)*8],2))
-        #gfi_text = binascii.unhexlify('%x' % int(g_text[::-1][:(len(g_text)/8)*8],2))
-        bf_text = binascii.unhexlify('%x' % int(b_text[:(len(b_text)/8)*8],2))
-        #bfi_text = binascii.unhexlify('%x' % int(b_text[::-1][:(len(b_text)/8)*8],2))
-        rgbf_text = binascii.unhexlify('%x' % int(rgb_text[:(len(rgb_text)/8)*8],2))
-        #rgbfi_text = binascii.unhexlify('%x' % int(rgb_text[::-1][:(len(rgb_text)/8)*8],2))
-
+        try:
+            rf_text = self._get_text(r_text)
+            #rfi_text = self._get_text(r_text[::-1]) # Reverse binary
+            gf_text = self._get_text(g_text)
+            #gfi_text = self._get_text(g_text[::-1])
+            bf_text = self._get_text(b_text)
+            #bfi_text = self._get_text(b_text[::-1])
+            rgbf_text = self._get_text(rgb_text)
+            #rgbfi_text = self._get_text(rgb_text[::-1])
+        except Exception as e:
+            print "Error extractin text from images: "+e
 
         strs = []
         strs += find_strings(rf_text, self.min_len)
@@ -136,6 +137,10 @@ class LSB_module:
     
     def _au_contraire(self,px):
         return 0 if px==255 else 255
+        
+
+    def _get_text(self, bin_data):
+        return ''.join(chr(int(bin_data[i:i+8], 2)) for i in xrange(0, len(bin_data), 8))
 
 
 #fourier

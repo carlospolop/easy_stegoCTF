@@ -59,9 +59,9 @@ class Exif_module:
 
         for i in tag_keys:
             try:
-                self._save_in_output('%s (%s): %s', i, FIELD_TYPES[data[i].field_type][2], data[i].printable)
+                self._save_in_output(str(i)+" ("+str(FIELD_TYPES[data[i].field_type][2])+"): "+str(data[i].printable))
             except:
-                self._save_in_output("%s : %s", i, str(data[i]))
+                self._save_in_output(str(i)+" : "+str(data[i]))
 
 
     def mprint(self):
