@@ -82,7 +82,13 @@ class Stego_module:
                 return
             for l in stdout.split("\n"):
                 ls = l.split()
-                self._save_in_output(ls[-4]+" "+ls[-2]+" "+ls[-1])
+                str_to_save = []
+                for s in l[::-1]:
+                    str_to_save.insert(s)
+                    if "\r" in s:
+                        self._save_in_output(" ".join(str_to_save))
+                        break
+                     
 
         else:
             for l in stdout.split("\n"):
