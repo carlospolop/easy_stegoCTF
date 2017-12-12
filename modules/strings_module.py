@@ -64,7 +64,7 @@ class Strings_module:
 
 
 def check_valid_string(string_toCheck):
-    return True if len(re.findall(r'\W', string_toCheck) <= len(string_toCheck)*0.3) else False
+    return True if len(re.findall(r'\W', string_toCheck)) <= len(string_toCheck)*0.3 else False
 
 
 def find_strings(data, min_len):

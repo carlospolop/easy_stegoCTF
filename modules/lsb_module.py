@@ -47,10 +47,10 @@ class LSB_module:
         is_r, is_g, is_b = 0, 0, 0
         r_text, g_text, b_text, rgb_text = "", "", "", ""
 
+        #Remove comments if you want to check more things
         for i in range(0,h):
             for j in range(0,w):
                 (r,g,b) = pixels_orig[j,i]
-                #print "r:"+str(bin(r))+" g:"+str(bin(g))+" b:"+str(bin(b))  
                 if(r%2==0):
                     r_text += "0"
                     rgb_text += "0"
@@ -82,28 +82,28 @@ class LSB_module:
                     is_b = 255
 
                 pximg_rgb[j,i]=(is_r, is_g, is_b)
-                pximg_rgbi[j,i]=(self._au_contraire(is_r), self._au_contraire(is_g), self._au_contraire(is_b))
+                #pximg_rgbi[j,i]=(self._au_contraire(is_r), self._au_contraire(is_g), self._au_contraire(is_b))
             
         #Hidden Text
         rf_text = binascii.unhexlify('%x' % int(r_text[:(len(r_text)/8)*8],2))
-        rfi_text = binascii.unhexlify('%x' % int(r_text[::-1][:(len(r_text)/8)*8],2)) # Reverse binary
+        #rfi_text = binascii.unhexlify('%x' % int(r_text[::-1][:(len(r_text)/8)*8],2)) # Reverse binary
         gf_text = binascii.unhexlify('%x' % int(g_text[:(len(g_text)/8)*8],2))
-        gfi_text = binascii.unhexlify('%x' % int(g_text[::-1][:(len(g_text)/8)*8],2))
+        #gfi_text = binascii.unhexlify('%x' % int(g_text[::-1][:(len(g_text)/8)*8],2))
         bf_text = binascii.unhexlify('%x' % int(b_text[:(len(b_text)/8)*8],2))
-        bfi_text = binascii.unhexlify('%x' % int(b_text[::-1][:(len(b_text)/8)*8],2))
+        #bfi_text = binascii.unhexlify('%x' % int(b_text[::-1][:(len(b_text)/8)*8],2))
         rgbf_text = binascii.unhexlify('%x' % int(rgb_text[:(len(rgb_text)/8)*8],2))
-        rgbfi_text = binascii.unhexlify('%x' % int(rgb_text[::-1][:(len(rgb_text)/8)*8],2))
+        #rgbfi_text = binascii.unhexlify('%x' % int(rgb_text[::-1][:(len(rgb_text)/8)*8],2))
 
 
         strs = []
         strs += find_strings(rf_text, self.min_len)
-        strs += find_strings(rfi_text, self.min_len)
+        #strs += find_strings(rfi_text, self.min_len)
         strs += find_strings(gf_text, self.min_len)
-        strs += find_strings(gfi_text, self.min_len)
+        #strs += find_strings(gfi_text, self.min_len)
         strs += find_strings(bf_text, self.min_len)
-        strs += find_strings(bfi_text, self.min_len)
+        #strs += find_strings(bfi_text, self.min_len)
         strs += find_strings(rgbf_text, self.min_len)
-        strs += find_strings(rgbfi_text, self.min_len)
+        #strs += find_strings(rgbfi_text, self.min_len)
         for s in strs:
             self._save_in_output(s)
 
@@ -114,7 +114,7 @@ class LSB_module:
         outimg_g.save(self.save_directory + "/"+ filename + "_g.png","png")
         outimg_b.save(self.save_directory + "/"+ filename + "_b.png","png")
         outimg_rgb.save(self.save_directory + "/"+ filename + "_rgb.png","png")
-        outimg_rgbi.save(self.save_directory + "/"+ filename + "_rgbi.png","png")
+        #outimg_rgbi.save(self.save_directory + "/"+ filename + "_rgbi.png","png")
 
 
     def mprint(self):
