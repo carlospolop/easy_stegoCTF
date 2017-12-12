@@ -84,9 +84,9 @@ class Stego_module:
                 ls = l.split()
                 str_to_save = []
                 for s in l[::-1]:
-                    str_to_save.insert(s)
+                    str_to_save.insert(0,s)
                     if "\r" in s:
-                        self._save_in_output(" ".join(str_to_save))
+                        self._save_in_output("".join(str_to_save))
                         break
                      
 
