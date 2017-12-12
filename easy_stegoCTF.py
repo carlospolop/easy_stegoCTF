@@ -36,8 +36,11 @@ def main(argv):
                 try: 
                     os.makedirs(out_dir)
                 except:
-                    "Not a directory: "+out_dir
+                    "Not a directory or not enough permissions: "+out_dir
                     sys.exit(-2)
+            if not os.path.isdir(out_dir) or not os.access(out_dir, os.W_OK):
+                "Not a directory or not enough permissions: "+out_dir
+                sys.exit(-2)
 
         elif opt in ("-g","--stego"):
             try_all = False

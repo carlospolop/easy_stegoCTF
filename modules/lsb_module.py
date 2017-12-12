@@ -9,7 +9,7 @@ class LSB_module:
         self.file_path = file_path
         self.save_directory = save_directory
         self.search = search
-        self.min_len = min_len
+        self.min_len = min_len+1
         self.found = False
         self.found_array = []
         self.usefull_urls = []
