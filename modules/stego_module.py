@@ -72,7 +72,7 @@ class Stego_module:
             self.output.append("#### Zsteg ####")
             self._execute_line(line)
             self.output.append("#### Zsteg End ####")
-        except:
+        except Exception as e:
             self.output.append("Error: Do you have installed Zsteg and in PATH? (https://github.com/zed-0xff/zsteg.git) --> "+ line)
             self.output.append(e)
 
