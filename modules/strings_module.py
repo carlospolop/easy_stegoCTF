@@ -64,7 +64,7 @@ class Strings_module:
 
 
 def check_valid_string(string_toCheck):
-    return True if len(re.findall(r'\W', string_toCheck)) <= len(string_toCheck)*0.3 else False
+    return True if (len(re.findall(r'\W', string_toCheck)) <= len(string_toCheck)*0.3) else False
 
 
 def find_strings(data, min_len):
@@ -74,12 +74,12 @@ def find_strings(data, min_len):
         if byte in string.printable[:95]: #No \t\n\r\x0b\x0c
             current_string += str(byte)
         else:
-            if current_string and len(current_string) >= min_len and check_valid_string(current_string):
+            if current_string and len(current_string) >= min_len and len(current_string) < 550 and check_valid_string(current_string):
                 cs_rev = current_string[::-1]
                 strings_found.append(str(current_string)+" --> "+str(current_string[::-1]))
                 current_string = ""
         
-    if current_string and len(current_string) >= min_len:
+    if current_string and len(current_string) >= min_len and len(current_string) < 500:
         strings_found.append(str(current_string)+" --> "+str(current_string[::-1]))
 
     for s in strings_found:
