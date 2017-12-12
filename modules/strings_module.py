@@ -68,7 +68,7 @@ def check_valid_string(string_toCheck):
 
 
 def find_strings(data, min_len):
-    strings_found, strings_found_comp = []
+    strings_found, strings_found_comp = [], []
     current_string, str_comp = "", ""
     for byte in data:
         if byte in string.printable[:95]: #No \t\n\r\x0b\x0c
