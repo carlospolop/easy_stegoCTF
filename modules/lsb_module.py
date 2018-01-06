@@ -132,7 +132,8 @@ class LSB_module:
 
 
     def _save_in_output(self, out):
-        self.output.append(self.check_found(out))
+        if not out in self.output:
+            self.output.append(self.check_found(out))
 
     
     def _au_contraire(self,px):
@@ -141,8 +142,3 @@ class LSB_module:
 
     def _get_text(self, bin_data):
         return ''.join(chr(int(bin_data[i:i+8], 2)) for i in xrange(0, len(bin_data), 8))
-
-
-#fourier
-#convert ball_3h6SOemwRR_PmQhXh2AM.png -fft  +depth +adjoin fourier-%d.png
-#convert fourier-0.png -auto-level -evaluate log 12000 spectrum.png
