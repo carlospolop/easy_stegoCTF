@@ -49,10 +49,11 @@ class Exif_module:
 
         if 'JPEGThumbnail' in data:
             self._save_in_output('File has JPEG thumbnail')
-            del data['JPEGThumbnail']
+            self._save_in_output(data['JPEGThumbnail'])
         if 'TIFFThumbnail' in data:
             self._save_in_output('File has TIFF thumbnail')
-            del data['TIFFThumbnail']
+            self._save_in_output(data['TIFFThumbnail'])
+            #del
 
         tag_keys = list(data.keys())
         tag_keys.sort()

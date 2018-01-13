@@ -5,18 +5,18 @@ from modules import Exif_module, Strings_module, Stego_module, LSB_module, Binwa
 
 
 def main(argv):
-    hlp = "-f <inputfile> -o <outputdirectory> [-s <String_to_search> [-g/--stego] [-m/--metadata] [-b/--binwalk] [-l/--lsb] [-t/--strings] [-x/--hexdump] [-n/--noprint] [-r/--min-len <min_len_of_strings>]]"
+    hlp = "-f <inputfile> -o <outputdirectory> [-s <String_to_search> [-g/--stego] [-m/--metadata] [-b/--binwalk] [-l/--lsb] [-t/--strings] [-x/--hexdump] [-e/--entropy] [-n/--noprint] [-r/--min-len <min_len_of_strings>]]"
     try:
-        opts, args = getopt.getopt(argv,"hf:o:s:gmbltxnr:z",["help","ifile=","odir=","search=","stego","metadata","binwalk","lsb","strings","hexdump","noprint","min-len=","sanitize"])
+        opts, args = getopt.getopt(argv,"hf:o:s:gmbltxenr:z",["help","ifile=","odir=","search=","stego","metadata","binwalk","lsb","strings","hexdump","entropy","noprint","min-len=","sanitize"])
     except getopt.GetoptError, err:
         print "~ %s" % str(err)
         print hlp
         sys.exit(2)
 
-    general_urls = ["HexEditor: https://www.onlinehexeditor.com/","Steganographic Decoder: https://futureboy.us/stegano/decinput.html", "Find hidden images inside images: http://magiceye.ecksdee.co.uk/", "Fourier Transform: http://www.ejectamenta.com/Imaging-Experiments/fourierimagefiltering.html","PDF extractor: http://www.extractpdf.com/", "Gif frame extractor: https://ezgif.com/split", "Lector QR: http://qrlogo.kaarposoft.dk/qrdecode.html", "DTMF Tones: http://dialabc.com/sound/detect/index.html"]
+    general_urls = ["HexEditor: https://www.onlinehexeditor.com/","Steganographic Decoder: https://futureboy.us/stegano/decinput.html", "Find hidden images inside images: http://magiceye.ecksdee.co.uk/", "Fourier Transform: http://www.ejectamenta.com/Imaging-Experiments/fourierimagefiltering.html","PDF extractor: http://www.extractpdf.com/", "Gif frame extractor: https://ezgif.com/split", "Lector QR: http://qrlogo.kaarposoft.dk/qrdecode.html", "DTMF Tones: http://dialabc.com/sound/detect/index.html", "ELA: https://29a.ch/sandbox/2012/imageerrorlevelanalysis/"]
     stego_tools = ["StegSecret(GUI): http://stegsecret.sourceforge.net/","StegSolve(GUI): www.caesum.com/handbook/Stegsolve.jar","Steganabara(GUI): https://github.com/zardus/ctf-tools","Zsteg: https://github.com/zed-0xff/zsteg.git","StegDetect: https://github.com/abeluck/stegdetect","Binwalk: https://github.com/ReFirmLabs/binwalk", "Exif-py: https://github.com/ianare/exif-py"]
     search, out_dir, min_len = "", "", 5
-    try_all, print_each, try_stego, try_exif, try_binwalk, try_lsb, try_strings, try_hexdump, sanitize = True, True, False, False, False, False, False, False, False
+    try_all, print_each, try_stego, try_exif, try_binwalk, try_lsb, try_strings, try_hexdump, try_entropy, sanitize = True, True, False, False, False, False, False, False, False, False
 
     for opt, arg in opts:
         if opt == '-h':
@@ -63,7 +63,12 @@ def main(argv):
             try_strings = True
         
         elif opt in ("-x","--hexdump"):
+            try_all = False
             try_hexdump = True
+
+        elif opt in ("-e","--entropy"):
+            try_all = False
+            try_entropy = True
 
         elif opt in ("-s", "--search"):
             search = arg
@@ -103,8 +108,8 @@ def main(argv):
         strings.execute()
 
     # Stego MODULE
-    stego = Stego_module(inputfile, search, min_len)
-    if (try_all or try_stego):
+    stego = Stego_module(inputfile, search, min_len, try_all, try_stego, try_hexdump, try_entropy)
+    if (try_all or try_stego or try_hexdump or try_entropy):
         stego.execute()
 
     # LSB MODULE

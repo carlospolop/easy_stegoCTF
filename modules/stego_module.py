@@ -2,15 +2,17 @@ from subprocess import Popen, PIPE
 
 
 class Stego_module:
-    def __init__(self, file_path, search=None, min_len=5):
+    def __init__(self, file_path, search=None, min_len=5, , try_all=True, try_stego=False, try_hexdump=False, try_entropy=False):
         self.file_path = file_path
         self.search = search
         self.min_len = min_len
         self.found = False
         self.found_array = []
-        self.usefull_urls = ["Stegdetect have more tools for stego(https://github.com/abeluck/stegdetect):\n\t./stegcompare orig.jpg modified.jpg\n\t./stegdeimage orig.jpg deimages.jpg\n\t./stegbreak [-V] [-r <rules>] [-f <wordlist>] [-t <schemes>] file.jpg ..."]
+        self.usefull_urls = []
         self.output = []
         self.name = "Stego"
+        self.try_all, self.try_stego, self.try_hexdump, self.try_entropy = try_all, try_stego, try_hexdump, try_entropy
+
 
 
     def get_found(self):
@@ -34,9 +36,16 @@ class Stego_module:
 
     
     def execute(self): #This code is a modified version of the one found in https://github.com/ianare/exif-py/blob/develop/EXIF.py
-        self._stegdetect_tool()
-        self._zsteg_tool()
+        if (self.try_all or self.try_stego):
+            self._stegdetect_tool()
+            self._zsteg_tool()
 
+        if (self.try_all or self.try_hexdump):
+            self._hexdump_tool()
+
+        
+        if (self.try_all or self.try_entropy):
+            self._ent_tool()
 
     def mprint(self):
         print "###### "+self.name+" ######"
@@ -62,19 +71,40 @@ class Stego_module:
             self._execute_line(line)
             self.output.append("#### Stegdetect End ####\n")
         except Exception as e:
-            self.output.append("Error: Do you have installed Stegdetect and in PATH? (https://github.com/abeluck/stegdetect) --> "+ " ".join(line))
+            self.output.append("Error: Do you have installed Stegdetect and in PATH? (https://github.com/abeluck/stegdetect)")
             self.output.append(e)
 
 
     def _zsteg_tool(self):
-        #https://gorails.com/setup/ubuntu/16.04
         try:
             line = ["zsteg", "-a", "--min-str-len", str(self.min_len), self.file_path]
             self.output.append("#### Zsteg ####")
             self._execute_line(line)
             self.output.append("#### Zsteg End ####")
         except Exception as e:
-            self.output.append("Error: Do you have installed Zsteg and in PATH? (https://github.com/zed-0xff/zsteg.git) --> "+ " ".join(line))
+            self.output.append("Error: Do you have installed Zsteg and in PATH? (https://github.com/zed-0xff/zsteg.git)")
+            self.output.append(e)
+
+    
+    def _hexdump_tool():
+        try:
+            line = ["hexdump", "-C", self.file_path]
+            self.output.append("#### Entropy(ent) ####")
+            self._execute_line(line)
+            self.output.append("#### Hexdump End ####")
+        except Exception as e:
+            self.output.append("Error: Do you have installed hexdump and in PATH?")
+            self.output.append(e)
+
+
+    def _ent_tool(self):
+        try:
+            line = ["ent", self.file_path]
+            self.output.append("#### Entropy(ent) ####")
+            self._execute_line(line)
+            self.output.append("#### Entropy End ####")
+        except Exception as e:
+            self.output.append("Error: Do you have installed ent and in PATH?")
             self.output.append(e)
 
 
