@@ -67,6 +67,7 @@ class Stego_module:
 
 
     def _zsteg_tool(self):
+        #https://gorails.com/setup/ubuntu/16.04
         try:
             line = ["zsteg", "-a", "--min-str-len", str(self.min_len), self.file_path]
             self.output.append("#### Zsteg ####")

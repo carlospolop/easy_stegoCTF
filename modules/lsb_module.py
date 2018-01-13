@@ -37,7 +37,12 @@ class LSB_module:
 
     
     def execute(self): #This code is a modified version of the one found in https://github.com/ianare/exif-py/blob/develop/EXIF.py
-        img = Image.open(self.file_path)
+        try:
+            img = Image.open(self.file_path)
+        except:
+            self.output.append("No image")
+            return
+
         pixels_orig = img.load() 
         (w,h)=img.size
         
