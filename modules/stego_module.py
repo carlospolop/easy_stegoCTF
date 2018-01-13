@@ -86,7 +86,7 @@ class Stego_module:
             self.output.append(e)
 
     
-    def _hexdump_tool():
+    def _hexdump_tool(self):
         try:
             line = ["hexdump", "-C", self.file_path]
             self.output.append("#### Entropy(ent) ####")
