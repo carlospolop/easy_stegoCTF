@@ -2,7 +2,7 @@ from subprocess import Popen, PIPE
 
 
 class Stego_module:
-    def __init__(self, file_path, search=None, min_len=5, , try_all=True, try_stego=False, try_hexdump=False, try_entropy=False):
+    def __init__(self, file_path, search=None, min_len=5, try_all=True, try_stego=False, try_hexdump=False, try_entropy=False):
         self.file_path = file_path
         self.search = search
         self.min_len = min_len
