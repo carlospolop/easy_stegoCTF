@@ -39,6 +39,7 @@ class Stego_module:
         if (self.try_all or self.try_stego):
             self._stegdetect_tool()
             self._zsteg_tool()
+            self._stegcracker_tool()
 
         if (self.try_all or self.try_hexdump):
             self._hexdump_tool()
@@ -86,6 +87,17 @@ class Stego_module:
             self.output.append(e)
 
     
+    def _stegcracker_tool(self):
+        try:
+            line = ["stegcracker", self.file_path, "stegcracker_dict.txt"]
+            self.output.append("#### StegCracker ####")
+            self._execute_line(line)
+            self.output.append("#### StegCracker End ####")
+        except Exception as e:
+            self.output.append("Error: Do you have installed StegCracker and StegHide and in PATH? (https://github.com/Paradoxis/StegCracker.git)")
+            self.output.append(e)
+
+    
     def _hexdump_tool(self):
         try:
             line = ["hexdump", "-C", self.file_path]
@@ -124,6 +136,14 @@ class Stego_module:
                         self._save_in_output("".join(str_to_save))
                         break
                      
+        elif "stegcracker" in cmd:
+            if "Failed to crack file" in stdout:
+                self.output.append("Nothing detected with stegcracker:(")
+                return
+            for l in stdout.split("\n"):
+                self.output.append("Cracked !!!!")
+                if "Successfully cracked" in l:
+                    self.output.append(l)
 
         else:
             for l in stdout.split("\n"):
