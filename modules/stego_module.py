@@ -36,6 +36,15 @@ class Stego_module:
         for val in self.found_array:
             print val
 
+
+    def _check_file(self, path, cmd):
+        if os.path.isfile(path):
+            if os.path.getsize(path) > 1:
+                pw = Popen(["file", path], stdout=PIPE, stderr=PIPE, shell=shell)
+                stdout,stderr = pw.communicate()
+                if not "data" in stdout:
+                    self.output.append("CRACKED!! ("+cmd+")")
+
     
     def execute(self): #This code is a modified version of the one found in https://github.com/ianare/exif-py/blob/develop/EXIF.py
         if (self.try_all or self.try_stego):
@@ -50,7 +59,7 @@ class Stego_module:
             self._execute_tool("Strings (tail 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | tail -n 20")           
 
             #Stego
-            for t,name in ["j", "o", "p", "i", "f", "F", "a"],["JSteg", "Outguess", "JPHide", "Invisible secrets", "F5", "Sophisticated F5", "At end of file (camouflage or appendX)"]:
+            for t,name in zip(["j", "o", "p", "i", "f", "F", "a"],["JSteg", "Outguess", "JPHide", "Invisible secrets", "F5", "Sophisticated F5", "At end of file (camouflage or appendX)"]):
                 self._execute_tool("StegDetect -t "+t+" ("+name+")", ["stegdetect", "-t", t, self.file_path]) #https://github.com/abeluck/stegdetect
             
             self._execute_tool("PngCheck", ["pngcheck", self.file_path])
@@ -60,23 +69,23 @@ class Stego_module:
 
             path_jsteg_out = self.out_dir+"/jstegOUT"
             self._execute_tool("Jsteg", ["jsteg", "reveal", self.file_path, path_jsteg_out])
-            self._check_file(path_jsteg_out)
+            self._check_file(path_jsteg_out, "jsteg reveal "+self.file_path+ " " +path_jsteg_out)
 
             path_outguess_out = self.out_dir+"/outguessOUT"
             self._execute_tool("Outguess", ["outguess", "-r", self.file_path, path_outguess_out])
-            self._check_file(path_outguess_out)
+            self._check_file(path_outguess_out, "outguess -r "+self.file_path+ " " +path_jsteg_out)
             
             path_outguess013_out = self.out_dir+"/outguessOUT-013"
             self._execute_tool("Outguess-0.13", ["outguess-0.13", "-r", self.file_path, path_outguess013_out])
-            self._check_file(path_outguess013_out)
+            self._check_file(path_outguess013_out, "outguess-0.13 -r "+self.file_path+ " " +path_jsteg_out)
 
             path_openstego_out = self.out_dir+"/openstego"
             self._execute_tool("OpenStego", "echo -e \"\\n\" | openstego extract -sf "+self.file_pat+" -xf "+path_openstego_out, True)
-            self._check_file(path_openstego_out)
+            self._check_file(path_openstego_out, "openstego extract -sf "+self.file_pat+" -xf "+path_openstego_out)
 
             path_lsbsteg_out = self.out_dir+"/lsbsteg"
             self._execute_tool("LSBSteg", ["lsbsteg", "decode", "-i", self.file_path, "-o", path_lsbsteg_out])
-            self._check_file(path_lsbsteg_out)
+            self._check_file(path_lsbsteg_out, "lsbsteg decode -i "+self.file_path+ " " +path_jsteg_out)
 
             #Crackers
             absPath = os.path.realpath(__file__)
