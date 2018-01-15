@@ -87,10 +87,10 @@ class Stego_module:
             self._check_file(path_outguess013_out, "outguess-0.13 -r "+self.file_path+ " " +path_jsteg_out)
             print "[*] Outguess-0.13 executed"
 
-            path_openstego_out = self.out_dir+"/openstego"
-            self._execute_tool("OpenStego", "echo -e \"\\n\" | openstego extract -sf "+self.file_path+" -xf "+path_openstego_out, True)
-            self._check_file(path_openstego_out, "openstego extract -sf "+self.file_path+" -xf "+path_openstego_out)
-            print "[*] OpenStego executed"
+            #path_openstego_out = self.out_dir+"/openstego"
+            #self._execute_tool("OpenStego", "echo -e \"\\n\" | openstego extract -sf "+self.file_path+" -xf "+path_openstego_out, True)
+            #self._check_file(path_openstego_out, "openstego extract -sf "+self.file_path+" -xf "+path_openstego_out)
+            #print "[*] OpenStego executed"
 
             path_lsbsteg_out = self.out_dir+"/lsbsteg"
             self._execute_tool("LSBSteg", ["lsbsteg", "decode", "-i", self.file_path, "-o", path_lsbsteg_out])
