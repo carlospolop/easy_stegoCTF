@@ -98,7 +98,7 @@ class Stego_module:
             print "[*] LSBSteg executed"
 
             #Crackers
-            absPath = os.path.realpath(__file__)
+            absPath = os.path.dirname(os.path.abspath(__file__))+"/../"
             wordlist = absPath + "/stegocracker_dict.txt"
             print "Wordlist: "+wordlist
 
