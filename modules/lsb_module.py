@@ -124,16 +124,17 @@ class LSB_module:
 
 
     def mprint(self):
-        print "###### "+self.name+" ######"
-        if self.usefull_urls:
-            print "Usefull "+self.name+" URLS:"
-            for val in self.usefull_urls:
-                print val
-            print
-    
-        for out in self.output:
-            print out
-        print "###### "+self.name+" END ######\n"
+        if len(self.output) > 0:
+            print "###### "+self.name+" ######"
+            if self.usefull_urls:
+                print "Usefull "+self.name+" URLS:"
+                for val in self.usefull_urls:
+                    print val
+                print
+        
+            for out in self.output:
+                print out
+            print "###### "+self.name+" END ######\n"
 
 
     def _save_in_output(self, out):

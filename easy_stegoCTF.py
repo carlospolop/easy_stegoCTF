@@ -63,7 +63,6 @@ def main(argv):
             try_strings = True
         
         elif opt in ("-x","--hexdump"):
-            try_all = False
             try_hexdump = True
 
         elif opt in ("-e","--entropy"):
@@ -94,21 +93,21 @@ def main(argv):
 
     # Binwalk MODULE
     bwlk = Binwalk_module(inputfile, out_dir, try_hexdump, search, sanitize)
-    if (try_all or try_binwalk):
+    if (try_binwalk):
         bwlk.execute()
 
     # Exif MODULE
     exif = Exif_module(inputfile, search)
-    if (try_all or try_exif):
+    if (try_exif):
         exif.execute()
 
     # Strings MODULE
     strings = Strings_module(inputfile, search, min_len)
-    if (try_all or try_strings):
+    if (try_strings):
         strings.execute()
 
     # Stego MODULE
-    stego = Stego_module(inputfile, search, min_len, try_all, try_stego, try_hexdump, try_entropy)
+    stego = Stego_module(inputfile, out_dir, search, min_len, try_all, try_stego, try_hexdump, try_entropy)
     if (try_all or try_stego or try_hexdump or try_entropy):
         stego.execute()
 

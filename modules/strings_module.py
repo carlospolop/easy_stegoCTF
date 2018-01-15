@@ -1,4 +1,6 @@
 import string, re
+from subprocess import Popen, PIPE
+
 
 
 class Strings_module:
@@ -11,6 +13,7 @@ class Strings_module:
         self.usefull_urls = []
         self.output = []
         self.name = "Strings"
+        self.encodings = ["s", "S", "b", "l", "B", "L"]
 
 
     def get_found(self):
@@ -33,7 +36,11 @@ class Strings_module:
             print val
 
     
-    def execute(self): #This code is a modified version of the one found in https://github.com/ianare/exif-py/blob/develop/EXIF.py
+    def execute(self):
+        for e in self.encodings:
+            self._save_in_output("------> Strings --all -e "+e+" -n " +tr(self.min_len)+ " <------")
+            self._execute_line(["strings", "--all", "-e", e, "-n", str(self.min_len), self.file_path])
+        
         try:
             with open(self.file_path, 'rb') as f:
                 content = f.read() 
@@ -42,25 +49,36 @@ class Strings_module:
             return
 
         strs = find_strings(content, self.min_len)
+        self._save_in_output("------> Extra strings <------")
         for s in strs:
             self._save_in_output(s)
 
 
     def mprint(self):
-        print "###### "+self.name+" ######"
-        if self.usefull_urls:
-            print "Usefull "+self.name+" URLS:"
-            for val in self.usefull_urls:
-                print val
-            print
-    
-        for out in self.output:
-            print out
-        print "###### "+self.name+" END ######\n"
+        if len(self.output) > 0:
+            print "###### "+self.name+" ######"
+            if self.usefull_urls:
+                print "Usefull "+self.name+" URLS:"
+                for val in self.usefull_urls:
+                    print val
+                print
+        
+            for out in self.output:
+                print out
+            print "###### "+self.name+" END ######\n"
 
 
     def _save_in_output(self, out):
-        self.output.append(self.check_found(out))
+        if not out in self.output:
+            self.output.append(self.check_found(out))
+
+
+    def _execute_line(self, cmd, shell=False):
+        pw = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=shell)
+        stdout,stderr = pw.communicate()
+        for l in stdout.split("\n"):
+            self._save_in_output(l)
+
 
 
 def check_valid_string(string_toCheck):
@@ -68,7 +86,7 @@ def check_valid_string(string_toCheck):
 
 
 def find_strings(data, min_len):
-    strings_found, strings_found_comp = [], []
+    strings_found = []
     current_string, str_comp = "", ""
     for byte in data:
         if byte in string.printable[:95]: #No \t\n\r\x0b\x0c
@@ -82,14 +100,8 @@ def find_strings(data, min_len):
     if current_string and len(current_string) >= min_len and len(current_string) < 500:
         strings_found.append(str(current_string)+" --> "+str(current_string[::-1]))
 
-    for s in strings_found:
-        str_comp += s 
-        if str_comp < 25:
-            str_comp += " [|] "
-        else:
-            strings_found_comp.append(str_comp)
-            str_comp = ""
-    if str_comp:
-        strings_found_comp.append(str_comp) 
+    return strings_found
 
-    return strings_found_comp
+
+
+
