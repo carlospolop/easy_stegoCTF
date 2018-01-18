@@ -55,7 +55,7 @@ check_result_file() {
         echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"
 
     elif [ $SIZE -ge 1 ]; then
-        echo "Something Found using pass: \"$PASS\" (outguess -k \"$PASS\" -r $in_file $outfile)"
+        echo "Some data found using pass: \"$PASS\" (outguess -k \"$PASS\" -r $in_file $outfile)"
         echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"
     fi
     rm $RESULT_FILE

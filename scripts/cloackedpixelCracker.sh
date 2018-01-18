@@ -55,7 +55,7 @@ check_result_file() {
         echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"
 
     elif [ $SIZE -ge 1 ]; then
-        echo "Something Found using pass: \"$PASS\" (cloackedpixel extract $in_file $out_file $PASS)"
+        echo "Some data found using pass: \"$PASS\" (cloackedpixel extract $in_file $out_file $PASS)"
         echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"
     fi
     rm $RESULT_FILE

@@ -51,7 +51,7 @@ check_result_file() {
       echo -e "Found something!!!"
       echo "Result size: $SIZE (type: '`file $out_file`')"
     else
-      echo "Something Found. Result size: $SIZE (type: '`file $out_file`')"
+      echo "Some data found... Result size: $SIZE (type: '`file $out_file`')"
     fi
     rm $out_file
 }

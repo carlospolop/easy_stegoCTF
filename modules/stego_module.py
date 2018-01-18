@@ -61,72 +61,71 @@ class Stego_module:
             self._execute_tool("Binwalk", ["binwalk", self.file_path])
             self._execute_tool("Foremost", ["foremost", "-o", self.out_dir+"/foremost", "-i", self.file_path])
             self._execute_tool("Strings (head 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | head -n 20", True)
-            self.output.append("[......]")
             self._execute_tool("Strings (tail 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | tail -n 20", True)           
 
             #Stego
             for t,name in zip(["j", "o", "p", "i", "f", "F", "a"],["JSteg", "Outguess", "JPHide", "Invisible secrets", "F5", "Sophisticated F5", "At end of file (camouflage or appendX)"]):
                 self._execute_tool("StegDetect -t "+t+" ("+name+")", ["stegdetect", "-t", t, self.file_path]) #https://github.com/abeluck/stegdetect
             
-            print "[*] StegDetect executed"
+            #print "[*] StegDetect executed"
             self._execute_tool("PngCheck", ["pngcheck", self.file_path])
-            print "[*] PngCheck executed"
+            #print "[*] PngCheck executed"
             self._execute_tool("ZSteg", ["zsteg", "-a", "--min-str-len", str(self.min_len), self.file_path]) #https://github.com/zed-0xff/zsteg.git
-            print "[*] ZSteg executed"
+            #print "[*] ZSteg executed"
             self._execute_tool("StegHide", ["steghide", "extract", "-sf", self.file_path, "-p", '""'])
-            print "[*] StegHide executed"
+            #print "[*] StegHide executed"
             self._execute_tool("StegoVeritas", ["stegoveritas.py", self.file_path, "-outDir", self.out_dir, "-imageTransform", "-colorMap", "-trailing"])
-            print "[*] StegoVeritas executed"
+            #print "[*] StegoVeritas executed"
 
             path_jsteg_out = self.out_dir+"/jstegOUT"
             self._execute_tool("Jsteg", ["jsteg", "reveal", self.file_path, path_jsteg_out])
             self._check_file(path_jsteg_out, "jsteg reveal "+self.file_path+ " " +path_jsteg_out)
-            print "[*] Jsteg executed"
+            #print "[*] Jsteg executed"
 
             path_outguess_out = self.out_dir+"/outguessOUT"
             self._execute_tool("Outguess", ["outguess", "-r", self.file_path, path_outguess_out])
             self._check_file(path_outguess_out, "outguess -r "+self.file_path+ " " +path_jsteg_out)
-            print "[*] Outguess executed"
+            #print "[*] Outguess executed"
             
             path_outguess013_out = self.out_dir+"/outguessOUT-013"
             self._execute_tool("Outguess-0.13", ["outguess-0.13", "-r", self.file_path, path_outguess013_out])
             self._check_file(path_outguess013_out, "outguess-0.13 -r "+self.file_path+ " " +path_jsteg_out)
-            print "[*] Outguess-0.13 executed"
+            #print "[*] Outguess-0.13 executed"
 
-            #path_openstego_out = self.out_dir+"/openstego"
-            #self._execute_tool("OpenStego", "echo -e \"\\n\" | openstego extract -sf "+self.file_path+" -xf "+path_openstego_out, True)
-            #self._check_file(path_openstego_out, "openstego extract -sf "+self.file_path+" -xf "+path_openstego_out)
+            path_openstego_out = self.out_dir+"/openstego"
+            self._execute_tool("OpenStego", "echo -e \"\\n\" | openstego extract -sf "+self.file_path+" -xf "+path_openstego_out, True)
+            self._check_file(path_openstego_out, "openstego extract -sf "+self.file_path+" -xf "+path_openstego_out)
             #print "[*] OpenStego executed"
 
             path_lsbsteg_out = self.out_dir+"/lsbsteg"
             self._execute_tool("LSBSteg", ["LSBSteg", "decode", "-i", self.file_path, "-o", path_lsbsteg_out])
             self._check_file(path_lsbsteg_out, "LSBSteg decode -i "+self.file_path+ " " +path_jsteg_out)
-            print "[*] LSBSteg executed"
+            #print "[*] LSBSteg executed"
 
             #Crackers
             absPath = os.path.dirname(os.path.abspath(__file__))+"/../"
             wordlist = absPath + "/stegocracker_dict.txt"
-            print "Wordlist: "+wordlist
+            #print "Wordlist: "+wordlist
 
             steghideCracker = absPath + "/scripts/steghideCracker.sh"
             steghideCracker_out = self.out_dir+"/steghideCracker"
             self._execute_tool("SteghideCracker", [steghideCracker, "-i", self.file_path, "-w", wordlist, "-o", steghideCracker_out])
-            print "[*] "+steghideCracker+" executed"
+            #print "[*] "+steghideCracker+" executed"
 
             outguessCracker = absPath + "/scripts/outguessCracker.sh"
             outguessCracker_out = self.out_dir+"/outguess"
             self._execute_tool("OutguessCracker", [outguessCracker, "-i", self.file_path, "-w", wordlist, "-o", outguessCracker_out])
-            print "[*] "+outguessCracker+" executed"
+            #print "[*] "+outguessCracker+" executed"
 
             outguess013Cracker = absPath + "/scripts/outguess013Cracker.sh"
             outguess013Cracker_out = self.out_dir+"/outguess013"
             self._execute_tool("Outguess013Cracker", [outguess013Cracker, "-i", self.file_path, "-w", wordlist, "-o", outguess013Cracker_out])
-            print "[*] "+outguess013Cracker+" executed"
+            #print "[*] "+outguess013Cracker+" executed"
 
             steganoTool = absPath + "/scripts/check_steganoTool.sh"
             steganoTool_out = self.out_dir+"/steganoTool"
             self._execute_tool("SteganoTool", [steganoTool, "-i", self.file_path, "-w", wordlist, "-o", steganoTool_out])
-            print "[*] "+steganoTool+" executed"
+            #print "[*] "+steganoTool+" executed"
 
             #jphideCracker = absPath + "/../scripts/jphideCracker.sh" #Need to fix!!
             #jphideCracker_out = self.out_dir+"/jphide"
@@ -162,10 +161,10 @@ class Stego_module:
             print "###### "+self.name+" END ######\n"
 
 
-    def _execute_tool(self, name, line):
+    def _execute_tool(self, name, line, shell=False):
         try:
             self.output.append("#### "+name+" ####")
-            self._execute_line(line)
+            self._execute_line(line, shell)
             self.output.append("#### "+name+" End ####\n")
         except Exception as e:
             self.output.append("Error: Do you have installed "+name+" and in PATH?")

@@ -60,7 +60,7 @@ check_result_file() {
         return 0
 
     elif [ $SIZE -ge 1 ]; then
-        echo "Something Found using pass: \"$PASS\"? (jpseek $in_file $out_file)"
+        echo "Some data found using pass: \"$PASS\"? (jpseek $in_file $out_file)"
         echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"
     fi
     rm $RESULT_FILE
