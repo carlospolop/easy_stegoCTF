@@ -43,8 +43,14 @@ class Stego_module:
                 pw = Popen(["file", path], stdout=PIPE, stderr=PIPE, shell=shell)
                 stdout,stderr = pw.communicate()
                 if not "data" in stdout:
-                    self.output.append("CRACKED!! ("+cmd+")")
-
+                    self.output.append("CRACKED!! ("+cmd+") --> "+stdout)
+                    return
+                else:
+                    self.output.append("Something probably not insteresting dicovered ("+cmd+") --> "+stdout)
+                    return
+        
+        self.output.append("Nothing found")
+        return
     
     def execute(self): #This code is a modified version of the one found in https://github.com/ianare/exif-py/blob/develop/EXIF.py
         if (self.try_all or self.try_stego):
@@ -54,9 +60,9 @@ class Stego_module:
             self._execute_tool("Exiftool", ["exiftool", self.file_path])
             self._execute_tool("Binwalk", ["binwalk", self.file_path])
             self._execute_tool("Foremost", ["foremost", "-o", self.out_dir+"/foremost", "-i", self.file_path])
-            self._execute_tool("Strings (head 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | head -n 20")
+            self._execute_tool("Strings (head 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | head -n 20", True)
             self.output.append("[......]")
-            self._execute_tool("Strings (tail 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | tail -n 20")           
+            self._execute_tool("Strings (tail 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | tail -n 20", True)           
 
             #Stego
             for t,name in zip(["j", "o", "p", "i", "f", "F", "a"],["JSteg", "Outguess", "JPHide", "Invisible secrets", "F5", "Sophisticated F5", "At end of file (camouflage or appendX)"]):
@@ -67,7 +73,7 @@ class Stego_module:
             print "[*] PngCheck executed"
             self._execute_tool("ZSteg", ["zsteg", "-a", "--min-str-len", str(self.min_len), self.file_path]) #https://github.com/zed-0xff/zsteg.git
             print "[*] ZSteg executed"
-            self._execute_tool("StegHide", ["StegHide", "extract", "-sf", self.file_path, "-p", '""'])
+            self._execute_tool("StegHide", ["steghide", "extract", "-sf", self.file_path, "-p", '""'])
             print "[*] StegHide executed"
             self._execute_tool("StegoVeritas", ["stegoveritas.py", self.file_path, "-outDir", self.out_dir, "-imageTransform", "-colorMap", "-trailing"])
             print "[*] StegoVeritas executed"
@@ -93,8 +99,8 @@ class Stego_module:
             #print "[*] OpenStego executed"
 
             path_lsbsteg_out = self.out_dir+"/lsbsteg"
-            self._execute_tool("LSBSteg", ["lsbsteg", "decode", "-i", self.file_path, "-o", path_lsbsteg_out])
-            self._check_file(path_lsbsteg_out, "lsbsteg decode -i "+self.file_path+ " " +path_jsteg_out)
+            self._execute_tool("LSBSteg", ["LSBSteg", "decode", "-i", self.file_path, "-o", path_lsbsteg_out])
+            self._check_file(path_lsbsteg_out, "LSBSteg decode -i "+self.file_path+ " " +path_jsteg_out)
             print "[*] LSBSteg executed"
 
             #Crackers
@@ -103,8 +109,8 @@ class Stego_module:
             print "Wordlist: "+wordlist
 
             steghideCracker = absPath + "/scripts/steghideCracker.sh"
-            steghideCracker_out = self.out_dir+"/stegCracker"
-            self._execute_tool("StegCracker", [steghideCracker, "-i", self.file_path, "-w", wordlist, "-o", steghideCracker_out])
+            steghideCracker_out = self.out_dir+"/steghideCracker"
+            self._execute_tool("SteghideCracker", [steghideCracker, "-i", self.file_path, "-w", wordlist, "-o", steghideCracker_out])
             print "[*] "+steghideCracker+" executed"
 
             outguessCracker = absPath + "/scripts/outguessCracker.sh"
@@ -192,7 +198,7 @@ class Stego_module:
                     self.output.append(l)
 
         elif "jsteg" in cmd:
-            if (("invalid JPEG" in stdout) or ("not contain hidden" in stdout)):
+            if (("invalid JPEG" in stdout) or ("not contain hidden" in stdout) or (len(stdout) < 5)):
                 self.output.append("Nothing detected with jsteg:(")
             else:
                 self.output.append("Detected: "+str(stdout))

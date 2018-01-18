@@ -17,14 +17,10 @@ check_result_file() {
   SIZE=`stat -c %s "$RESULT_FILE"`
   if [ ! "`file $RESULT_FILE`" = "$RESULT_FILE: data" ] && [ $SIZE -ge 1 ]; then
     echo ""
-    echo -e "${RED}Found something!!!${NO_COLOR}"
+    echo -e "${RED}Found something${NO_COLOR}"
     echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"
-    echo "--------------"
-    head -n 20 $RESULT_FILE
-    echo "--------------"
   else
-    echo "Probably no result..."
-    echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"
+    echo "Probably nothing interesting --> Result size: $SIZE (type: '`file $RESULT_FILE`')"
   fi
   rm $RESULT_FILE
 }

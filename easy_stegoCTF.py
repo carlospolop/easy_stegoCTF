@@ -13,8 +13,8 @@ def main(argv):
         print hlp
         sys.exit(2)
 
-    general_urls = ["HexEditor: https://www.onlinehexeditor.com/","Steganographic Decoder: https://futureboy.us/stegano/decinput.html", "Find hidden images inside images: http://magiceye.ecksdee.co.uk/", "Fourier Transform: http://www.ejectamenta.com/Imaging-Experiments/fourierimagefiltering.html","PDF extractor: http://www.extractpdf.com/", "Gif frame extractor: https://ezgif.com/split", "Lector QR: http://qrlogo.kaarposoft.dk/qrdecode.html", "DTMF Tones: http://dialabc.com/sound/detect/index.html", "ELA: https://29a.ch/sandbox/2012/imageerrorlevelanalysis/"]
-    stego_tools = ["StegSecret(GUI): http://stegsecret.sourceforge.net/","StegSolve(GUI): www.caesum.com/handbook/Stegsolve.jar","Steganabara(GUI): https://github.com/zardus/ctf-tools","Zsteg: https://github.com/zed-0xff/zsteg.git","StegDetect: https://github.com/abeluck/stegdetect","Binwalk: https://github.com/ReFirmLabs/binwalk", "Exif-py: https://github.com/ianare/exif-py", "StegCracker(steghide): https://github.com/Paradoxis/StegCracker"]
+    general_urls = []
+    stego_tools = []
     search, out_dir, min_len = "", "", 5
     try_all, print_each, try_stego, try_exif, try_binwalk, try_lsb, try_strings, try_hexdump, try_entropy, sanitize = True, True, False, False, False, False, False, False, False, False
 

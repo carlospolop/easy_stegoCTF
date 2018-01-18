@@ -50,15 +50,10 @@ check_result_file() {
     SIZE=`stat -c %s "$RESULT_FILE"`
     if [ ! "`file $RESULT_FILE`" = "$RESULT_FILE: data" ] && [ $SIZE -ge 1 ]; then
         echo ""
-        echo "Cracked!! (outguess -k \"$PASS\" -r $in_file $outfile)"
-        echo "Cracked file $in_file using password: $PASS"
+        echo "Found something interesting using password: $PASS (outguess -k \"$PASS\" -r $in_file $outfile)"
         echo "The hidden data has been written to: $RESULT_FILE"
         echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"
-        echo "--------------"
-        head -n 20 $RESULT_FILE
-        echo ""
-        echo "--------------"
-        exit 0
+
     elif [ $SIZE -ge 1 ]; then
         echo "Something Found using pass: \"$PASS\" (outguess -k \"$PASS\" -r $in_file $outfile)"
         echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"

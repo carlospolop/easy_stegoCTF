@@ -50,9 +50,6 @@ check_result_file() {
       echo ""
       echo -e "Found something!!!"
       echo "Result size: $SIZE (type: '`file $out_file`')"
-      echo "--------------"
-      head -n 20 $out_file
-      echo "--------------"
     else
       echo "Something Found. Result size: $SIZE (type: '`file $out_file`')"
     fi
