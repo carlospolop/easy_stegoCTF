@@ -188,7 +188,7 @@ class Stego_module:
     def _execute_cracker(self, name, line, out):
         try:
             out.append("#### "+name+" ####")
-            self._execute_line(line, shell)
+            self._execute_line(line)
             out.append("#### "+name+" End ####\n")
         except Exception as e:
             out.append("Error: ")
