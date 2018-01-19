@@ -174,7 +174,7 @@ class Stego_module:
     def _execute_tool(self, name, line, shell=False, check=False):
         try:
             self.output.append("#### "+name+" ####")
-            self._execute_line(line, shell)
+            self._execute_line(line, shell=shell)
             if check:
                 self._check_file(check, " ".join(line))
                             
@@ -187,14 +187,14 @@ class Stego_module:
     def _execute_cracker(self, name, line, out):
         try:
             out.append("#### "+name+" ####")
-            self._execute_line(line)
+            self._execute_line(line, out=out)
             out.append("#### "+name+" End ####\n")
         except Exception as e:
             out.append("Error: ")
             out.append(e)
 
 
-    def _execute_line(self, cmd, shell=False):
+    def _execute_line(self, cmd, shell=False, out=False):
         pw = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=shell)
         stdout,stderr = pw.communicate()
         if "zsteg" in cmd: 
@@ -227,7 +227,10 @@ class Stego_module:
 
         else:
             for l in stdout.split("\n"):
-                self._save_in_output(l)        
+                if out:
+                    out._save_in_output(l)
+                else:
+                    self._save_in_output(l)        
         
 
     def _save_in_output(self, out):
