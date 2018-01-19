@@ -165,7 +165,7 @@ class Stego_module:
                 print
         
             for out in self.output:
-                out
+                print out
             print "###### "+self.name+" END ######\n"
 
 

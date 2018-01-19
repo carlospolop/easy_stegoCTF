@@ -1,0 +1,250 @@
+File input: website.jpg
+
+###### General Usefull URLs ######
+###### End URLs ######
+
+###### Stego ######
+#### File ####
+/tmp/website.jpg: JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, progressive, precision 8, 1020x510, frames 3
+
+#### File End ####
+#### Identify ####
+Image: /tmp/website.jpg
+  Format: JPEG (Joint Photographic Experts Group JFIF format)
+  Geometry: 1020x510
+  Class: DirectClass
+  Type: true color
+  Depth: 8 bits-per-pixel component
+  Channel Depths:
+    Red:      8 bits
+    Green:    8 bits
+    Blue:     8 bits
+  Channel Statistics:
+    Red:
+      Minimum:                     0.00 (0.0000)
+      Maximum:                 65535.00 (1.0000)
+      Mean:                    40925.66 (0.6245)
+      Standard Deviation:      21384.86 (0.3263)
+    Green:
+      Minimum:                     0.00 (0.0000)
+      Maximum:                 65535.00 (1.0000)
+      Mean:                    44131.59 (0.6734)
+      Standard Deviation:      20692.00 (0.3157)
+    Blue:
+      Minimum:                     0.00 (0.0000)
+      Maximum:                 65535.00 (1.0000)
+      Mean:                    37210.23 (0.5678)
+      Standard Deviation:      26726.83 (0.4078)
+  Filesize: 121.9Ki
+  Interlace: Line
+  Orientation: Unknown
+  Background Color: white
+  Border Color: #DFDFDF
+  Matte Color: #BDBDBD
+  Page geometry: 1020x510+0+0
+  Compose: Over
+  Dispose: Undefined
+  Iterations: 0
+  Compression: JPEG
+  JPEG-Quality: 86
+  JPEG-Colorspace: 2
+  JPEG-Colorspace-Name: RGB
+  JPEG-Sampling-factors: 1x1,1x1,1x1
+  Signature: 9eb75591557e5e4051002b174e0df78f0ca57092018365c54f5d599659c9162f
+  Tainted: False
+  User Time: 0.040u
+  Elapsed Time: 0:01
+  Pixels Per Second: 12.4Mi
+
+#### Identify End ####
+#### Exiftool ####
+ExifTool Version Number         : 10.10
+File Name                       : website.jpg
+Directory                       : /tmp
+File Size                       : 122 kB
+File Modification Date/Time     : 2018:01:12 08:31:47+00:00
+File Access Date/Time           : 2018:01:19 17:07:37+00:00
+File Inode Change Date/Time     : 2018:01:19 17:05:58+00:00
+File Permissions                : rw-rw-r--
+File Type                       : JPEG
+File Type Extension             : jpg
+MIME Type                       : image/jpeg
+JFIF Version                    : 1.01
+Resolution Unit                 : None
+X Resolution                    : 1
+Y Resolution                    : 1
+Image Width                     : 1020
+Image Height                    : 510
+Encoding Process                : Progressive DCT, Huffman coding
+Bits Per Sample                 : 8
+Color Components                : 3
+Y Cb Cr Sub Sampling            : YCbCr4:4:4 (1 1)
+Image Size                      : 1020x510
+Megapixels                      : 0.520
+
+#### Exiftool End ####
+#### Binwalk ####
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+0             0x0             JPEG image data, JFIF standard 1.01
+
+
+#### Binwalk End ####
+#### Foremost ####
+ERROR: /tmp/web1/foremost is not empty
+ 	Please specify another directory or run with -T.
+
+#### Foremost End ####
+#### Strings (head 20) ####
+Z>t9y
+	8jn[
+|d)UX\
+;8+G[
+J]f64
+*,vq_?\Mz
+llnZv
+Nla^T
++9tY2
+WBEL$)C
+Fx1'Tj
+\u$Z:
+Bn$X]
+,MW:1
+]o2[q}
+!6]@h
+}:v/C
+754(#
+}>p|^
+WbZT!
+
+#### Strings (head 20) End ####
+#### Strings (tail 20) ####
+u|$"kz
+ae?ilx[
+	elkb++
+Qx[V/
+(Dy)|t
+~E9!rtM
+<yQn,
+~BkR-
+/R'/P
+NE%mE
+rTB|(
+?SFW&
+\j<N\y
+IjZrQ
+WIEjJ
+%rb\1/
+~.SjTk7
+ !0APQ`
+m&4qT(
+tb `m
+
+#### Strings (tail 20) End ####
+#### StegDetect -t j (JSteg) ####
+/tmp/website.jpg : negative
+
+#### StegDetect -t j (JSteg) End ####
+#### StegDetect -t o (Outguess) ####
+/tmp/website.jpg : negative
+
+#### StegDetect -t o (Outguess) End ####
+#### StegDetect -t p (JPHide) ####
+/tmp/website.jpg : negative
+
+#### StegDetect -t p (JPHide) End ####
+#### StegDetect -t i (Invisible secrets) ####
+/tmp/website.jpg : negative
+
+#### StegDetect -t i (Invisible secrets) End ####
+#### StegDetect -t f (F5) ####
+/tmp/website.jpg : negative
+
+#### StegDetect -t f (F5) End ####
+#### StegDetect -t F (Sophisticated F5) ####
+/tmp/website.jpg : f5[0.301425](**)
+
+#### StegDetect -t F (Sophisticated F5) End ####
+#### StegDetect -t a (At end of file (camouflage or appendX)) ####
+/tmp/website.jpg : negative
+
+#### StegDetect -t a (At end of file (camouflage or appendX)) End ####
+#### PngCheck ####
+/tmp/website.jpg  this is neither a PNG or JNG image nor a MNG stream
+ERROR: /tmp/website.jpg
+
+#### PngCheck End ####
+#### ZSteg ####
+#### ZSteg End ####
+#### StegHide ####
+
+#### StegHide End ####
+#### StegoVeritas ####
+Type:	JPEG (ISO 10918)
+Mode:	RGB
+
+Input file doesn't appear to be a Color Map image... Returning
+
+#### StegoVeritas End ####
+#### Jsteg ####
+Nothing detected with jsteg:(
+#### Jsteg End ####
+Nothing found
+#### Outguess ####
+
+Nothing found
+#### Outguess End ####
+#### Outguess-0.13 ####
+
+Nothing found
+#### Outguess-0.13 End ####
+#### OpenStego ####
+Enter Password: 
+
+Nothing found
+#### OpenStego End ####
+#### LSBSteg ####
+
+Nothing found
+#### LSBSteg End ####
+#### SteganoTool ####
+- stegano-lsb (encoding UTF-8)
+- stegano-lsb (encoding UTF-32LE)
+### stegano-lsb End ###
+- stegano-lsb-set (generator composite | encoding UTF-8)
+- stegano-lsb-set (generator composite | encoding UTF-32LE)
+- stegano-lsb-set (generator eratosthenes | encoding UTF-8)
+- stegano-lsb-set (generator eratosthenes | encoding UTF-32LE)
+- stegano-lsb-set (generator fermat | encoding UTF-8)
+- stegano-lsb-set (generator fermat | encoding UTF-32LE)
+- stegano-lsb-set (generator fibonacci | encoding UTF-8)
+- stegano-lsb-set (generator fibonacci | encoding UTF-32LE)
+- stegano-lsb-set (generator identity | encoding UTF-8)
+- stegano-lsb-set (generator identity | encoding UTF-32LE)
+- stegano-lsb-set (generator log_gen | encoding UTF-8)
+- stegano-lsb-set (generator log_gen | encoding UTF-32LE)
+- stegano-lsb-set (generator mersenne | encoding UTF-8)
+- stegano-lsb-set (generator mersenne | encoding UTF-32LE)
+- stegano-lsb-set (generator triangular_numbers | encoding UTF-8)
+- stegano-lsb-set (generator triangular_numbers | encoding UTF-32LE)
+### stegano-lsb-set End ###
+
+### stegano-red ###
+### stegano-red End ###
+
+#### SteganoTool End ####
+#### SteghideCracker ####
+Nothing found, sry.
+
+#### SteghideCracker End ####
+#### OutguessCracker ####
+Nothing found, sry.
+
+#### OutguessCracker End ####
+#### Outguess013Cracker ####
+Nothing found, sry.
+
+#### Outguess013Cracker End ####
+###### Stego END ######
+
