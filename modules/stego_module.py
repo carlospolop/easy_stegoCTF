@@ -1,5 +1,6 @@
 import os
 from subprocess import Popen, PIPE
+from threading import Thread
 
 
 class Stego_module:
@@ -11,10 +12,9 @@ class Stego_module:
         self.found = False
         self.found_array = []
         self.usefull_urls = []
-        self.output = []
+        self.output, self.stegHide_out, self.outguess_out, self.outguess013_out, self.stegano_out = [], [], [], [], []
         self.name = "Stego"
         self.try_all, self.try_stego, self.try_hexdump, self.try_entropy = try_all, try_stego, try_hexdump, try_entropy
-
 
 
     def get_found(self):
@@ -52,56 +52,8 @@ class Stego_module:
         self.output.append("Nothing found")
         return
     
-    def execute(self): #This code is a modified version of the one found in https://github.com/ianare/exif-py/blob/develop/EXIF.py
+    def execute(self):
         if (self.try_all or self.try_stego):
-            #Generals
-            self._execute_tool("File", ["file", self.file_path])
-            self._execute_tool("Identify", ["identify", "-verbose", self.file_path])
-            self._execute_tool("Exiftool", ["exiftool", self.file_path])
-            self._execute_tool("Binwalk", ["binwalk", self.file_path])
-            self._execute_tool("Foremost", ["foremost", "-o", self.out_dir+"/foremost", "-i", self.file_path])
-            self._execute_tool("Strings (head 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | head -n 20", True)
-            self._execute_tool("Strings (tail 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | tail -n 20", True)           
-
-            #Stego
-            for t,name in zip(["j", "o", "p", "i", "f", "F", "a"],["JSteg", "Outguess", "JPHide", "Invisible secrets", "F5", "Sophisticated F5", "At end of file (camouflage or appendX)"]):
-                self._execute_tool("StegDetect -t "+t+" ("+name+")", ["stegdetect", "-t", t, self.file_path]) #https://github.com/abeluck/stegdetect
-            
-            #print "[*] StegDetect executed"
-            self._execute_tool("PngCheck", ["pngcheck", self.file_path])
-            #print "[*] PngCheck executed"
-            self._execute_tool("ZSteg", ["zsteg", "-a", "--min-str-len", str(self.min_len), self.file_path]) #https://github.com/zed-0xff/zsteg.git
-            #print "[*] ZSteg executed"
-            self._execute_tool("StegHide", ["steghide", "extract", "-sf", self.file_path, "-p", '""'])
-            #print "[*] StegHide executed"
-            self._execute_tool("StegoVeritas", ["stegoveritas.py", self.file_path, "-outDir", self.out_dir, "-imageTransform", "-colorMap", "-trailing"])
-            #print "[*] StegoVeritas executed"
-
-            path_jsteg_out = self.out_dir+"/jstegOUT"
-            self._execute_tool("Jsteg", ["jsteg", "reveal", self.file_path, path_jsteg_out])
-            self._check_file(path_jsteg_out, "jsteg reveal "+self.file_path+ " " +path_jsteg_out)
-            #print "[*] Jsteg executed"
-
-            path_outguess_out = self.out_dir+"/outguessOUT"
-            self._execute_tool("Outguess", ["outguess", "-r", self.file_path, path_outguess_out])
-            self._check_file(path_outguess_out, "outguess -r "+self.file_path+ " " +path_jsteg_out)
-            #print "[*] Outguess executed"
-            
-            path_outguess013_out = self.out_dir+"/outguessOUT-013"
-            self._execute_tool("Outguess-0.13", ["outguess-0.13", "-r", self.file_path, path_outguess013_out])
-            self._check_file(path_outguess013_out, "outguess-0.13 -r "+self.file_path+ " " +path_jsteg_out)
-            #print "[*] Outguess-0.13 executed"
-
-            path_openstego_out = self.out_dir+"/openstego"
-            self._execute_tool("OpenStego", "echo -e \"\\n\" | openstego extract -sf "+self.file_path+" -xf "+path_openstego_out, True)
-            self._check_file(path_openstego_out, "openstego extract -sf "+self.file_path+" -xf "+path_openstego_out)
-            #print "[*] OpenStego executed"
-
-            path_lsbsteg_out = self.out_dir+"/lsbsteg"
-            self._execute_tool("LSBSteg", ["LSBSteg", "decode", "-i", self.file_path, "-o", path_lsbsteg_out])
-            self._check_file(path_lsbsteg_out, "LSBSteg decode -i "+self.file_path+ " " +path_jsteg_out)
-            #print "[*] LSBSteg executed"
-
             #Crackers
             absPath = os.path.dirname(os.path.abspath(__file__))+"/../"
             wordlist = absPath + "/stegocracker_dict.txt"
@@ -109,22 +61,22 @@ class Stego_module:
 
             steghideCracker = absPath + "/scripts/steghideCracker.sh"
             steghideCracker_out = self.out_dir+"/steghideCracker"
-            self._execute_tool("SteghideCracker", [steghideCracker, "-i", self.file_path, "-w", wordlist, "-o", steghideCracker_out])
+            steghideThread = Thread(target= self._execute_cracker, args=("SteghideCracker", [steghideCracker, "-i", self.file_path, "-w", wordlist, "-o", steghideCracker_out], steghideCracker_out))
             #print "[*] "+steghideCracker+" executed"
 
             outguessCracker = absPath + "/scripts/outguessCracker.sh"
             outguessCracker_out = self.out_dir+"/outguess"
-            self._execute_tool("OutguessCracker", [outguessCracker, "-i", self.file_path, "-w", wordlist, "-o", outguessCracker_out])
+            outguessThread = Thread(target= self._execute_cracker, args=("OutguessCracker", [outguessCracker, "-i", self.file_path, "-w", wordlist, "-o", outguessCracker_out], outguessCracker_out))
             #print "[*] "+outguessCracker+" executed"
 
             outguess013Cracker = absPath + "/scripts/outguess013Cracker.sh"
             outguess013Cracker_out = self.out_dir+"/outguess013"
-            self._execute_tool("Outguess013Cracker", [outguess013Cracker, "-i", self.file_path, "-w", wordlist, "-o", outguess013Cracker_out])
+            outguess013Thread = Thread(target= self._execute_cracker, args=("Outguess013Cracker", [outguess013Cracker, "-i", self.file_path, "-w", wordlist, "-o", outguess013Cracker_out], outguess013Cracker_out))
             #print "[*] "+outguess013Cracker+" executed"
 
             steganoTool = absPath + "/scripts/check_steganoTool.sh"
             steganoTool_out = self.out_dir+"/steganoTool"
-            self._execute_tool("SteganoTool", [steganoTool, "-i", self.file_path, "-w", wordlist, "-o", steganoTool_out])
+            steganoThread = Threadl(target= self._execute_cracker, args=("SteganoTool", [steganoTool, "-i", self.file_path, "-w", wordlist, "-o", steganoTool_out], steganoTool_out))
             #print "[*] "+steganoTool+" executed"
 
             #jphideCracker = absPath + "/../scripts/jphideCracker.sh" #Need to fix!!
@@ -139,6 +91,65 @@ class Stego_module:
             #openstegoCracker_out = self.out_dir+"/openstego"
             #self._execute_tool("OpenstegoCracker", [openstegoCracker, "-i", self.file_path, "-w", wordlist, "-o", openstegoCracker_out])
 
+            steghideThread.start()
+            outguessThread.start()
+            outguess013Thread.start()
+            steganoThread.start()
+
+            #Generals
+            self._execute_tool("File", ["file", self.file_path])
+            self._execute_tool("Identify", ["identify", "-verbose", self.file_path])
+            self._execute_tool("Exiftool", ["exiftool", self.file_path])
+            self._execute_tool("Binwalk", ["binwalk", self.file_path])
+            self._execute_tool("Foremost", ["foremost", "-o", self.out_dir+"/foremost", "-i", self.file_path])
+            self._execute_tool("Strings (head 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | head -n 20", shell=True)
+            self._execute_tool("Strings (tail 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | tail -n 20", shell=True)           
+
+            #Stego
+            for t,name in zip(["j", "o", "p", "i", "f", "F", "a"],["JSteg", "Outguess", "JPHide", "Invisible secrets", "F5", "Sophisticated F5", "At end of file (camouflage or appendX)"]):
+                self._execute_tool("StegDetect -t "+t+" ("+name+")", ["stegdetect", "-t", t, self.file_path])
+            
+            #print "[*] StegDetect executed"
+            self._execute_tool("PngCheck", ["pngcheck", self.file_path])
+            #print "[*] PngCheck executed"
+            self._execute_tool("ZSteg", ["zsteg", "-a", "--min-str-len", str(self.min_len), self.file_path])
+            #print "[*] ZSteg executed"
+            self._execute_tool("StegHide", ["steghide", "extract", "-sf", self.file_path, "-p", '""'])
+            #print "[*] StegHide executed"
+            self._execute_tool("StegoVeritas", ["stegoveritas.py", self.file_path, "-outDir", self.out_dir, "-imageTransform", "-colorMap", "-trailing"])
+            #print "[*] StegoVeritas executed"
+
+            path_jsteg_out = self.out_dir+"/jstegOUT"
+            self._execute_tool("Jsteg", ["jsteg", "reveal", self.file_path, path_jsteg_out])
+            self._check_file(path_jsteg_out, "jsteg reveal "+self.file_path+ " " +path_jsteg_out)
+            #print "[*] Jsteg executed"
+
+            path_outguess_out = self.out_dir+"/outguessOUT"
+            self._execute_tool("Outguess", ["outguess", "-r", self.file_path, path_outguess_out], check=path_outguess_out)
+            #print "[*] Outguess executed"
+            
+            path_outguess013_out = self.out_dir+"/outguessOUT-013"
+            self._execute_tool("Outguess-0.13", ["outguess-0.13", "-r", self.file_path, path_outguess013_out], check=path_outguess013_out)
+            #print "[*] Outguess-0.13 executed"
+
+            path_openstego_out = self.out_dir+"/openstego"
+            self._execute_tool("OpenStego", "echo -e \"\\n\" | openstego extract -sf "+self.file_path+" -xf "+path_openstego_out, shell=True, check=path_openstego_out)
+            #print "[*] OpenStego executed"
+
+            path_lsbsteg_out = self.out_dir+"/lsbsteg"
+            self._execute_tool("LSBSteg", ["LSBSteg", "decode", "-i", self.file_path, "-o", path_lsbsteg_out], check=path_lsbsteg_out)
+            #print "[*] LSBSteg executed"
+
+            #Wait for the threads
+            steghideThread.join()
+            outguessThread.join()
+            outguess013Thread.join()
+            steganoThread.join()
+
+            #Add outputs
+            self.output = self.output + self.stegHide_out + self.outguess_out + self.outguess013_out + self.stegano_out
+
+            
         if (self.try_hexdump):
             self._execute_tool("HexDump", ["hexdump", "-C", self.file_path])
 
@@ -161,14 +172,27 @@ class Stego_module:
             print "###### "+self.name+" END ######\n"
 
 
-    def _execute_tool(self, name, line, shell=False):
+    def _execute_tool(self, name, line, shell=False, check=False):
         try:
             self.output.append("#### "+name+" ####")
             self._execute_line(line, shell)
+            if check:
+                self._check_file(check, " ".join(line))
+                            
             self.output.append("#### "+name+" End ####\n")
         except Exception as e:
             self.output.append("Error: Do you have installed "+name+" and in PATH?")
             self.output.append(e)
+
+
+    def _execute_cracker(self, name, line, out):
+        try:
+            out.append("#### "+name+" ####")
+            self._execute_line(line, shell)
+            out.append("#### "+name+" End ####\n")
+        except Exception as e:
+            out.append("Error: ")
+            out.append(e)
 
 
     def _execute_line(self, cmd, shell=False):
@@ -187,14 +211,14 @@ class Stego_module:
                         self._save_in_output("".join(str_to_save))
                         break
                      
-        elif "stegcracker" in cmd:
-            if "Failed to crack file" in stdout:
-                self.output.append("Nothing detected with stegcracker:(")
-                return
-            for l in stdout.split("\n"):
-                self.output.append("Cracked !!!!")
-                if "Successfully cracked" in l:
-                    self.output.append(l)
+        #elif "stegcracker" in cmd:
+        #    if "Failed to crack file" in stdout:
+        #        self.output.append("Nothing detected with stegcracker:(")
+        #        return
+        #    for l in stdout.split("\n"):
+        #        self.output.append("Cracked !!!!")
+        #        if "Successfully cracked" in l:
+        #            self.output.append(l)
 
         elif "jsteg" in cmd:
             if (("invalid JPEG" in stdout) or ("not contain hidden" in stdout) or (len(stdout) < 5)):
@@ -204,8 +228,8 @@ class Stego_module:
 
         else:
             for l in stdout.split("\n"):
-                self._save_in_output(l)
-
+                self._save_in_output(l)        
+        
 
     def _save_in_output(self, out):
         self.output.append(self.check_found(out))
