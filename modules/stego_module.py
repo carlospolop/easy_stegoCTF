@@ -12,7 +12,7 @@ class Stego_module:
         self.found = False
         self.found_array = []
         self.usefull_urls = []
-        self.output, self.stegHide_out, self.outguess_out, self.outguess013_out, self.stegano_out = [], [], [], [], []
+        self.output, self.steghide_out, self.outguess_out, self.outguess013_out, self.stegano_out = [], [], [], [], []
         self.name = "Stego"
         self.try_all, self.try_stego, self.try_hexdump, self.try_entropy = try_all, try_stego, try_hexdump, try_entropy
 
@@ -61,22 +61,22 @@ class Stego_module:
 
             steghideCracker = absPath + "/scripts/steghideCracker.sh"
             steghideCracker_out = self.out_dir+"/steghideCracker"
-            steghideThread = Thread(target= self._execute_cracker, args=("SteghideCracker", [steghideCracker, "-i", self.file_path, "-w", wordlist, "-o", steghideCracker_out], steghideCracker_out))
+            steghideThread = Thread(target= self._execute_cracker, args=("SteghideCracker", [steghideCracker, "-i", self.file_path, "-w", wordlist, "-o", steghideCracker_out], self.steghide_out))
             #print "[*] "+steghideCracker+" executed"
 
             outguessCracker = absPath + "/scripts/outguessCracker.sh"
             outguessCracker_out = self.out_dir+"/outguess"
-            outguessThread = Thread(target= self._execute_cracker, args=("OutguessCracker", [outguessCracker, "-i", self.file_path, "-w", wordlist, "-o", outguessCracker_out], outguessCracker_out))
+            outguessThread = Thread(target= self._execute_cracker, args=("OutguessCracker", [outguessCracker, "-i", self.file_path, "-w", wordlist, "-o", outguessCracker_out], self.outguess_out))
             #print "[*] "+outguessCracker+" executed"
 
             outguess013Cracker = absPath + "/scripts/outguess013Cracker.sh"
             outguess013Cracker_out = self.out_dir+"/outguess013"
-            outguess013Thread = Thread(target= self._execute_cracker, args=("Outguess013Cracker", [outguess013Cracker, "-i", self.file_path, "-w", wordlist, "-o", outguess013Cracker_out], outguess013Cracker_out))
+            outguess013Thread = Thread(target= self._execute_cracker, args=("Outguess013Cracker", [outguess013Cracker, "-i", self.file_path, "-w", wordlist, "-o", outguess013Cracker_out], self.outguess013_out))
             #print "[*] "+outguess013Cracker+" executed"
 
             steganoTool = absPath + "/scripts/check_steganoTool.sh"
             steganoTool_out = self.out_dir+"/steganoTool"
-            steganoThread = Threadl(target= self._execute_cracker, args=("SteganoTool", [steganoTool, "-i", self.file_path, "-w", wordlist, "-o", steganoTool_out], steganoTool_out))
+            steganoThread = Thread(target= self._execute_cracker, args=("SteganoTool", [steganoTool, "-i", self.file_path, "-w", wordlist, "-o", steganoTool_out], self.stegano_out))
             #print "[*] "+steganoTool+" executed"
 
             #jphideCracker = absPath + "/../scripts/jphideCracker.sh" #Need to fix!!
