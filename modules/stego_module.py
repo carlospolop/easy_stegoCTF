@@ -165,7 +165,7 @@ class Stego_module:
                 print
         
             for out in self.output:
-                print out.replace('\x0A', "")
+                out
             print "###### "+self.name+" END ######\n"
 
 
