@@ -147,7 +147,7 @@ class Stego_module:
             steganoThread.join()
 
             #Add outputs
-            self.output = self.output + self.stegHide_out + self.outguess_out + self.outguess013_out + self.stegano_out
+            self.output = self.output + self.steghide_out + self.outguess_out + self.outguess013_out + self.stegano_out
 
             
         if (self.try_hexdump):
