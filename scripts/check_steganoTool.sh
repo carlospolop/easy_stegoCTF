@@ -48,17 +48,15 @@ check_result_file() {
     rm $out_file
 }
 
-echo
-echo "### stegano-lsb-set End ###"
-
-echo
-echo "### stegano-lsb End ###"
 
 for ENCODING in UTF-8 UTF-32LE; do
   echo "- stegano-lsb (encoding $ENCODING)"
   stegano-lsb reveal --input $in_file -e $ENCODING -o $out_file
   check_result_file $out_file
 done
+
+echo
+echo "### stegano-lsb End ###"
 
 # TODO: check why stegano is so buggy...
 # - geneators not working: ackermann ackermann_naive (require arguments - how to parse?)
@@ -71,6 +69,9 @@ for GENERATOR in composite eratosthenes fermat fibonacci identity log_gen mersen
     check_result_file $out_file
   done
 done
+
+echo
+echo "### stegano-lsb-set End ###"
 
 echo
 echo "### stegano-red ###"
