@@ -228,7 +228,7 @@ class Stego_module:
         else:
             for l in stdout.split("\n"):
                 if out:
-                    out._save_in_output(l)
+                    out.append(l)
                 else:
                     self._save_in_output(l)        
         
