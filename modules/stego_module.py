@@ -147,12 +147,10 @@ class Stego_module:
 
             #Add outputs
             self.output = self.output + self.steghide_out + self.outguess_out + self.outguess013_out
-
-            
+   
         if (self.try_hexdump):
             self._execute_tool("HexDump", ["hexdump", "-C", self.file_path])
 
-        
         if (self.try_all or self.try_entropy):
             self._execute_tool("Ent", ["ent", self.file_path])
 
@@ -167,7 +165,8 @@ class Stego_module:
                 print
         
             for out in self.output:
-                print out
+                if out != "\n":
+                    print out
             print "###### "+self.name+" END ######\n"
 
 
@@ -209,15 +208,6 @@ class Stego_module:
                     if "\r" in s:
                         self._save_in_output("".join(str_to_save))
                         break
-                     
-        #elif "stegcracker" in cmd:
-        #    if "Failed to crack file" in stdout:
-        #        self.output.append("Nothing detected with stegcracker:(")
-        #        return
-        #    for l in stdout.split("\n"):
-        #        self.output.append("Cracked !!!!")
-        #        if "Successfully cracked" in l:
-        #            self.output.append(l)
 
         elif "jsteg" in cmd:
             if (("invalid JPEG" in stdout) or ("not contain hidden" in stdout) or (len(stdout) < 5)):

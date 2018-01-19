@@ -55,7 +55,6 @@ for ENCODING in UTF-8 UTF-32LE; do
   check_result_file $out_file
 done
 
-echo
 echo "### stegano-lsb End ###"
 
 # TODO: check why stegano is so buggy...
@@ -70,7 +69,6 @@ for GENERATOR in composite eratosthenes fermat fibonacci identity log_gen mersen
   done
 done
 
-echo
 echo "### stegano-lsb-set End ###"
 
 echo
