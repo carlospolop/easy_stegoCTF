@@ -12,7 +12,7 @@ class Stego_module:
         self.found = False
         self.found_array = []
         self.usefull_urls = []
-        self.output, self.steghide_out, self.outguess_out, self.outguess013_out, self.stegano_out = [], [], [], [], []
+        self.output, self.steghide_out, self.outguess_out, self.outguess013_out = [], [], [], []
         self.name = "Stego"
         self.try_all, self.try_stego, self.try_hexdump, self.try_entropy = try_all, try_stego, try_hexdump, try_entropy
 
@@ -74,10 +74,6 @@ class Stego_module:
             outguess013Thread = Thread(target= self._execute_cracker, args=("Outguess013Cracker", [outguess013Cracker, "-i", self.file_path, "-w", wordlist, "-o", outguess013Cracker_out], self.outguess013_out))
             #print "[*] "+outguess013Cracker+" executed"
 
-            steganoTool = absPath + "/scripts/check_steganoTool.sh"
-            steganoTool_out = self.out_dir+"/steganoTool"
-            steganoThread = Thread(target= self._execute_cracker, args=("SteganoTool", [steganoTool, "-i", self.file_path, "-w", wordlist, "-o", steganoTool_out], self.stegano_out))
-            #print "[*] "+steganoTool+" executed"
 
             #jphideCracker = absPath + "/../scripts/jphideCracker.sh" #Need to fix!!
             #jphideCracker_out = self.out_dir+"/jphide"
@@ -94,7 +90,6 @@ class Stego_module:
             steghideThread.start()
             outguessThread.start()
             outguess013Thread.start()
-            steganoThread.start()
 
             #Generals
             self._execute_tool("File", ["file", self.file_path])
@@ -140,14 +135,18 @@ class Stego_module:
             self._execute_tool("LSBSteg", ["LSBSteg", "decode", "-i", self.file_path, "-o", path_lsbsteg_out], check=path_lsbsteg_out)
             #print "[*] LSBSteg executed"
 
+            steganoTool = absPath + "/scripts/check_steganoTool.sh"
+            steganoTool_out = self.out_dir+"/steganoTool"
+            self._execute_tool("SteganoTool", [steganoTool, "-i", self.file_path, "-o", steganoTool_out])
+            #print "[*] "+steganoTool+" executed"
+
             #Wait for the threads
             steghideThread.join()
             outguessThread.join()
             outguess013Thread.join()
-            steganoThread.join()
 
             #Add outputs
-            self.output = self.output + self.steghide_out + self.outguess_out + self.outguess013_out + self.stegano_out
+            self.output = self.output + self.steghide_out + self.outguess_out + self.outguess013_out
 
             
         if (self.try_hexdump):

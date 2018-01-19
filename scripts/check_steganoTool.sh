@@ -1,7 +1,7 @@
 #!/bin/bash
 
 verbose=0
-hlp_msg="$0 -i input_file [-v] -w wordlist -o out_file\n"
+hlp_msg="$0 -i input_file [-v] -o out_file\n"
 while getopts i:vhw:o: option
 do
     case "${option}" in
@@ -9,7 +9,6 @@ do
         o) out_file=${OPTARG};;
         v) verbose=1;;
         h) echo -e $hlp_msg; exit;;
-        w) wordlist=${OPTARG};;
     esac
 done
 
@@ -28,13 +27,6 @@ fi
 #Check if input file exists
 if [ ! -f $in_file ];then
     echo "Input file does not exist: $in_file"
-    echo -e $hlp_msg
-    exit
-fi
-
-#Check if wordlist file exists
-if [ ! -f $wordlist ];then
-    echo "Wordlist file does not exist: $in_file"
     echo -e $hlp_msg
     exit
 fi
