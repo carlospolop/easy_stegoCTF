@@ -54,7 +54,11 @@ class LSB_module:
         #Remove comments if you want to check more things
         for i in range(0,h):
             for j in range(0,w):
-                (r,g,b) = pixels_orig[j,i]
+                try:
+                    (r,g,b) = pixels_orig[j,i]
+                except:
+                    self.output.append("More than 3bytes py pixel")
+                    return
                 if(r%2==0):
                     r_text += "0"
                     rgb_text += "0"
