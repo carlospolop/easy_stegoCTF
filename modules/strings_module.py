@@ -38,7 +38,7 @@ class Strings_module:
     
     def execute(self):
         for e in self.encodings:
-            self._save_in_output("------> Strings --all -e "+e+" -n " +tr(self.min_len)+ " <------")
+            self._save_in_output("------> Strings --all -e "+e+" -n " +str(self.min_len)+ " <------")
             self._execute_line(["strings", "--all", "-e", e, "-n", str(self.min_len), self.file_path])
         
         try:
