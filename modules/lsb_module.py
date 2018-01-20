@@ -57,7 +57,7 @@ class LSB_module:
                 try:
                     (r,g,b) = pixels_orig[j,i]
                 except:
-                    self.output.append("More than 3bytes py pixel")
+                    self.output.append("More than 3bytes per pixel")
                     return
                 if(r%2==0):
                     r_text += "0"
