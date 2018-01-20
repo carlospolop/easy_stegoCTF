@@ -95,7 +95,7 @@ class Stego_module:
             self._execute_tool("File", ["file", self.file_path])
             self._execute_tool("Identify", ["identify", "-verbose", self.file_path])
             self._execute_tool("Exiftool", ["exiftool", self.file_path])
-            self._execute_tool("Binwalk", ["binwalk", self.file_path])
+            self._execute_tool("Binwalk", ["binwalk", "--d='.*'", self.file_path])
             self._execute_tool("Foremost", ["foremost", "-o", self.out_dir+"/foremost", "-i", self.file_path])
             self._execute_tool("Strings (head 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | head -n 20", shell=True)
             self._execute_tool("Strings (tail 20)", "strings -n "+str(self.min_len)+" "+self.file_path+" | tail -n 20", shell=True)           
