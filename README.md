@@ -6,7 +6,7 @@ python easy_stegoCTF.py -f <inputfile> -o <outputdirectory> [-s <String_to_searc
 
 Extract all but hexdump and only a few strings: python easy_stegoCTF.py -f <inputfile> -o <outputdirectory>
 Extract stego info: python easy_stegoCTF.py -f <inputfile> -o <outputdirectory> --stego
-Extract hexdump and and strings (min length 5): python easy_stegoCTF.py -f <inputfile> -o <outputdirectory> --strings --hexdump
+Extract hexdump and and strings (min length 5): python easy_stegoCTF.py -f <inputfile> -o <outputdirectory> --strings --min-len 5 --hexdump
 ```
 
 ## INSTALL:
