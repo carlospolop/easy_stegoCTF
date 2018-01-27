@@ -13,7 +13,7 @@ do
     esac
 done
 
-#Check if input file setted
+#Check if input file setted and is jpeg
 if [ -z ${in_file+x} ]; then 
     echo -e $hlp_msg
     exit
@@ -30,6 +30,11 @@ if [ ! -f $in_file ];then
     echo "Input file does not exist: $in_file"
     echo -e $hlp_msg
     exit
+else
+    if [[ ! $(file -b $in_file) == 'JPEG '* ]]; then
+        echo "Not a Jpeg";
+        exit;
+    fi
 fi
 
 #Check if wordlist file exists
@@ -38,6 +43,7 @@ if [ ! -f $wordlist ];then
     echo -e $hlp_msg
     exit
 fi
+
 
 #Chech if output is created and if it has something
 check_result_file() {

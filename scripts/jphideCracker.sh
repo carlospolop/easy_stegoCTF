@@ -25,11 +25,16 @@ if [ -z ${out_file+x} ]; then
     exit
 fi
 
-#Check if input file exists
+#Check if input file exists and is jpeg
 if [ ! -f $in_file ];then
     echo "Input file does not exist: $in_file"
     echo -e $hlp_msg
     exit
+else
+    if [[ ! $(file -b $in_file) == 'JPEG '* ]]; then
+        echo "Not a Jpeg";
+        exit;
+    fi
 fi
 
 #Check if wordlist file exists
