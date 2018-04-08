@@ -1,20 +1,20 @@
 # easy_stegoCTF
 
-## USAGE:
+## USAGE
 ```python
 python easy_stegoCTF.py -f <inputfile> -o <outputdirectory> [-s <String_to_search> [-g/--stego] [-m/--metadata] [-b/--binwalk] [-l/--lsb] [-t/--strings] [-x/--hexdump] [-e/--entropy] [-n/--noprint] [-r/--min-len <min_len_of_strings>]]
+``` 
 
-Extract all but hexdump and only a few strings: python easy_stegoCTF.py -f <inputfile> -o <outputdirectory>
-Extract stego info: python easy_stegoCTF.py -f <inputfile> -o <outputdirectory> --stego
-Extract hexdump and and strings (min length 5): python easy_stegoCTF.py -f <inputfile> -o <outputdirectory> --strings --min-len 5 --hexdump
-```
+Extract all but hexdump and only a few strings: `python easy_stegoCTF.py -f <inputfile> -o <outputdirectory>`
+Extract stego info: `python easy_stegoCTF.py -f <inputfile> -o <outputdirectory> --stego`
+Extract hexdump and and strings (min length 5): `python easy_stegoCTF.py -f <inputfile> -o <outputdirectory> --strings --min-len 5 --hexdump`
 
-## INSTALL:
-There isn't yet an installation script.
+## INSTALL
+There isn't yet any installation script.
 
 You have to install the tools that are used and you dont already have, in order to do it I recommend you to use the installation scripts that you can find: https://github.com/DominicBreuker/stego-toolkit
 
-## GENERAL FEATURES:
+## GENERAL FEATURES
 - [x] Automatically detects hidden files inside a file using "Binwalk".
 - [x] Automatically detects metadata.
 - [x] Automatically extracts strings.
@@ -24,7 +24,7 @@ You have to install the tools that are used and you dont already have, in order 
 - [x] Automatically shows the entropy of the file using "Ent".
 - [x] Automatically shows an hexdump.
 
-## STEGO IN IMAGES:
+## STEGO IN IMAGES
 - [x] Automatically check if the is information hidden in jpg by several algorithms using "StegDetect" (Algorithms: JSteg, Outguess, JPHide, Invisible Secrets, F5, Sophisticated F5, Append at the end)
 - [x] Automatically check if is a real PNG file using "PNGCheck"
 - [x] Automatically extract hidden information of a PNG using "ZSteg"
