@@ -1,7 +1,7 @@
 # easy_stegoCTF
 
 ## USAGE:
-```
+```python
 python easy_stegoCTF.py -f <inputfile> -o <outputdirectory> [-s <String_to_search> [-g/--stego] [-m/--metadata] [-b/--binwalk] [-l/--lsb] [-t/--strings] [-x/--hexdump] [-e/--entropy] [-n/--noprint] [-r/--min-len <min_len_of_strings>]]
 
 Extract all but hexdump and only a few strings: python easy_stegoCTF.py -f <inputfile> -o <outputdirectory>
@@ -10,7 +10,9 @@ Extract hexdump and and strings (min length 5): python easy_stegoCTF.py -f <inpu
 ```
 
 ## INSTALL:
-You have to install the tools that you dont already have, in order to do that i recommend you to use the installation scripts of: https://github.com/DominicBreuker/stego-toolkit
+There isn't yet an installation script.
+
+You have to install the tools that are used and you dont already have, in order to do it I recommend you to use the installation scripts that you can find: https://github.com/DominicBreuker/stego-toolkit
 
 ## GENERAL FEATURES:
 - [x] Automatically detects hidden files inside a file using "Binwalk".
