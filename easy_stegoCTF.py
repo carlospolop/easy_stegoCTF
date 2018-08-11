@@ -64,6 +64,7 @@ def main(argv):
         
         elif opt in ("-x","--hexdump"):
             try_hexdump = True
+	    try_all= False
 
         elif opt in ("-e","--entropy"):
             try_all = False
