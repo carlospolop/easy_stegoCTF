@@ -55,13 +55,13 @@ check_result_file() {
     SIZE=`stat -c %s "$RESULT_FILE"`
     if [ ! "`file $RESULT_FILE`" = "$RESULT_FILE: data" ] && [ $SIZE -ge 1 ]; then
         echo ""
-        echo "Found something interesting using password: $PASS (outguess-0.13 -k \"$PASS\" -r $in_file $outfile)"
-        echo "The hidden data has been written to: $RESULT_FILE"
-        echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"
+        echo "Interesting: $PASS (outguess-0.13 -k \"$PASS\" -r $in_file $out_file)"
+        echo -e "\t --> Size: $SIZE, type: '`file $RESULT_FILE`', content:`head -c 20 $RESULT_FILE`"
 
     elif [ $SIZE -ge 1 ]; then
-        echo "Some data found using pass: \"$PASS\" (outguess-0.13 -k \"$PASS\" -r $in_file $outfile)"
-        echo "Result size: $SIZE (type: '`file $RESULT_FILE`')"
+        if (( verbose > 0 ));then
+            echo "Data found using pass: \"$PASS\" (size: $SIZE, type: '`file $RESULT_FILE`')"
+        fi
     fi
     rm $RESULT_FILE
     return 0

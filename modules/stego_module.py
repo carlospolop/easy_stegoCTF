@@ -1,4 +1,4 @@
-import os
+import os, random
 from subprocess import Popen, PIPE
 from threading import Thread
 
@@ -40,10 +40,15 @@ class Stego_module:
     def _check_file(self, path, cmd):
         if os.path.isfile(path):
             if os.path.getsize(path) > 1:
-                pw = Popen(["file", path], stdout=PIPE, stderr=PIPE, shell=shell)
+                pw = Popen(["file", path], stdout=PIPE, stderr=PIPE)
                 stdout,stderr = pw.communicate()
-                if not "data" in stdout:
+		if len(stderr)>2:
+		    stdout = stdout +" "+stderr
+                print "file "+path+" --> "+stdout
+		if not "data" in stdout:
                     self.output.append("CRACKED!! ("+cmd+") --> "+stdout)
+		    with open(path,'r') as f:
+			self.output.append("File contains: "+f.read()[:40])
                     return
                 else:
                     self.output.append("Something probably not insteresting dicovered ("+cmd+") --> "+stdout)
@@ -103,14 +108,17 @@ class Stego_module:
             #Stego
             for t,name in zip(["j", "o", "p", "i", "f", "F", "a"],["JSteg", "Outguess", "JPHide", "Invisible secrets", "F5", "Sophisticated F5", "At end of file (camouflage or appendX)"]):
                 self._execute_tool("StegDetect -t "+t+" ("+name+")", ["stegdetect", "-t", t, self.file_path])
-            
-            #print "[*] StegDetect executed"
+	    #print "[*] StegDetect executed"
+
+	    self._execute_tool("StegBreak", ["stegbreak", "-f", wordlist, "-t", "p", self.file_path])
+            #print "[*] StegBreak executed"
+
             self._execute_tool("PngCheck", ["pngcheck", self.file_path])
             #print "[*] PngCheck executed"
-            self._execute_tool("ZSteg", ["zsteg", "-a", "--min-str-len", str(self.min_len), self.file_path])
+            self._execute_tool("ZSteg", ["zsteg", "-a", "--min-str-len", str(self.min_len+1), self.file_path])
             #print "[*] ZSteg executed"
-            self._execute_tool("StegHide", ["steghide", "extract", "-sf", self.file_path, "-p", '""'])
-            #print "[*] StegHide executed"
+            self._execute_tool("StegHide", "steghide extract -sf " + self.file_path + " -p '' -xf shide-"+str(random.random())+".txt", shell=True)
+	    #print "[*] StegHide executed"
             self._execute_tool("StegoVeritas", ["stegoveritas.py", self.file_path, "-outDir", self.out_dir, "-imageTransform", "-colorMap", "-trailing"])
             #print "[*] StegoVeritas executed"
 
@@ -120,11 +128,14 @@ class Stego_module:
             #print "[*] Jsteg executed"
 
             path_outguess_out = self.out_dir+"/outguessOUT"
-            self._execute_tool("Outguess", ["outguess", "-r", self.file_path, path_outguess_out], check=path_outguess_out)
+            ##print "outpath: "+path_outguess_out
+	    self._execute_tool("Outguess", 'outguess -r -k "" '+ self.file_path +' '+ path_outguess_out, check=path_outguess_out, shell=True)
+	    self._execute_tool("Outguess", 'outguess -r '+ self.file_path +' '+ path_outguess_out, check=path_outguess_out, shell=True)
             #print "[*] Outguess executed"
-            
+
             path_outguess013_out = self.out_dir+"/outguessOUT-013"
-            self._execute_tool("Outguess-0.13", ["outguess-0.13", "-r", self.file_path, path_outguess013_out], check=path_outguess013_out)
+            self._execute_tool("Outguess-0.13", "outguess-0.13 -r "+ self.file_path +" "+ path_outguess013_out, check=path_outguess013_out, shell=True)
+	    self._execute_tool("Outguess-0.13", 'outguess-0.13 -r -k "" '+ self.file_path +' '+ path_outguess013_out, check=path_outguess013_out, shell=True)
             #print "[*] Outguess-0.13 executed"
 
             path_openstego_out = self.out_dir+"/openstego"
@@ -147,7 +158,7 @@ class Stego_module:
 
             #Add outputs
             self.output = self.output + self.steghide_out + self.outguess_out + self.outguess013_out
-   
+
         if (self.try_hexdump):
             self._execute_tool("HexDump", ["hexdump", "-C", self.file_path])
 
@@ -163,20 +174,24 @@ class Stego_module:
                 for val in self.usefull_urls:
                     print val
                 print
-        
+
             for out in self.output:
                 print out
-            print "###### "+self.name+" END ######\n"
+            #print "###### "+self.name+" END ######\n"
 
 
     def _execute_tool(self, name, line, shell=False, check=False):
         try:
             self.output.append("#### "+name+" ####")
             self._execute_line(line, shell=shell)
+	    if not shell:
+		str_line = " ".join(line)
+	    else:
+		str_line = line
             if check:
-                self._check_file(check, " ".join(line))
-                            
-            self.output.append("#### "+name+" End ####\n")
+                self._check_file(check, str_line)
+
+            #self.output.append("#### "+name+" End ####\n")
         except Exception as e:
             self.output.append("Error: Do you have installed "+name+" and in PATH?")
             self.output.append(e)
@@ -186,7 +201,7 @@ class Stego_module:
         try:
             out.append("#### "+name+" ####")
             self._execute_line(line, out=out)
-            out.append("#### "+name+" End ####\n")
+            #out.append("#### "+name+" End ####\n")
         except Exception as e:
             out.append("Error: ")
             out.append(e)
@@ -195,7 +210,8 @@ class Stego_module:
     def _execute_line(self, cmd, shell=False, out=False):
         pw = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=shell)
         stdout,stderr = pw.communicate()
-        if "zsteg" in cmd: 
+	#print " ".join(cmd) + " --> "+stdout
+        if "zsteg" in cmd:
             if "nothing" in stdout:
                 self.output.append("[=] nothing :(")
                 return
@@ -209,18 +225,23 @@ class Stego_module:
                         break
 
         elif "jsteg" in cmd:
-            if (("invalid JPEG" in stdout) or ("not contain hidden" in stdout) or (len(stdout) < 5)):
+            if (("invalid JPEG" in stdout) or ("not contain hidden" in stdout)):
                 self.output.append("Nothing detected with jsteg:(")
-            else:
-                self.output.append("Detected: "+str(stdout))
+            #If nothing, jsteg should have extracted the data
+
+	elif "outguess" in cmd[0]:
+	    for l in stdout.split("\n"):
+		if not "Data"==l[:4]:
+		    self.output.append(l)
 
         else:
+	    if len(stderr) > 2 and not "steganoTool" in cmd[0] and not cmd[0] == "LSBSteg":
+		stdout = stdout + "\n Stderr: " + stderr
             for l in stdout.split("\n"):
                 if out:
                     out.append(l)
                 else:
-                    self._save_in_output(l)        
-        
+                    self._save_in_output(l)
 
     def _save_in_output(self, out):
         self.output.append(self.check_found(out))

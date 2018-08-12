@@ -45,11 +45,14 @@ if [ ! -f $wordlist ];then
 fi
 
 #Main
+
+
 while read pass; do
     if (( verbose > 0 ));then 
         echo -en "$pass\r"
     fi
-    if steghide extract -sf $in_file -xf $out_file -p "$pass" -f > /dev/null 2>&1; then
+    echo "using password $pass"
+    if steghide extract -sf $1 -xf $out_file -p $pass -f > /dev/null 2>&1; then
         size=`stat -c %s "$out_file"`
         echo "Cracked!! (steghide extract -sf $1 -xf $out_file -p \"$pass\" -f)"
         echo "Cracked file $in_file using password: $pass"

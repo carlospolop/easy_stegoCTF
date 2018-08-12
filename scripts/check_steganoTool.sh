@@ -64,7 +64,8 @@ for GENERATOR in composite eratosthenes fermat fibonacci identity log_gen mersen
   # generator 'carmichael' left out since it is slow
   for ENCODING in UTF-8 UTF-32LE; do
     echo "- stegano-lsb-set (generator $GENERATOR | encoding $ENCODING)"
-    stegano-lsb-set reveal --input $input_file -e $ENCODING -g $GENERATOR -o $out_file
+    echo "stegano-lsb-set reveal --input $in_file -e $ENCODING -g $GENERATOR -o $out_file"
+    stegano-lsb-set reveal --input $in_file -e $ENCODING -g $GENERATOR -o $out_file
     check_result_file $out_file
   done
 done
@@ -73,5 +74,5 @@ echo "### stegano-lsb-set End ###"
 
 echo
 echo "### stegano-red ###"
-stegano-red reveal --input $input_file
+stegano-red reveal --input $in_file
 echo "### stegano-red End ###"
